@@ -1,0 +1,14 @@
+tmp(0)	:= "0110000000100";	-- JMP @4   	;Deve desviar para 4
+tmp(1)	:= "0111000001001";	-- JEQ @9   	;Deve desviar para 9
+tmp(2)	:= "0000000000000";	-- 
+tmp(3)	:= "0000000000000";	-- 
+tmp(4)	:= "0100000000101";	-- LDI $5   	;Carrega o acumulador com valor 5
+tmp(5)	:= "0101100000000";	-- STA @256 	;Armazena 5 na posição 256 da memória
+tmp(6)	:= "1000100000000";	-- CEQ @256 	;A comparação deve fazer o flag_zero ser 1
+tmp(7)	:= "0110000000001";	-- JMP @1   	;Vai testar o flag_zero depois do jump
+tmp(8)	:= "0000000000000";	-- 
+tmp(9)	:= "0100000000100";	-- LDI $4   	;Carrega acumulador com valor 4
+tmp(10)	:= "1000100000000";	-- CEQ @256 	;Compara com valor 5, deve fazer o flag_zero ser 0
+tmp(11)	:= "0111000000011";	-- JEQ @3   	;Não deve ocorrer o desvio
+tmp(12)	:= "0110000001100";	-- JMP @12  	;Fim. Deve ficar neste laço
+tmp(13)	:= "0000000000000";	-- NOP      	;Ordem PC: 0 4 5 6 7 1 9 10 11 12 12 ...
