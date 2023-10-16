@@ -7,7 +7,7 @@ package constants is
 	constant NOP  : STD_LOGIC_VECTOR(3 downto 0) := "0000";
 	constant LDA  : STD_LOGIC_VECTOR(3 downto 0) := "0001";
 	constant ADD  : STD_LOGIC_VECTOR(3 downto 0) := "0010";
-	constant SUB  : STD_LOGIC_VECTOR(3 downto 0) := "0011";
+	constant SUBR : STD_LOGIC_VECTOR(3 downto 0) := "0011";
 	constant LDI  : STD_LOGIC_VECTOR(3 downto 0) := "0100";
 	constant STA  : STD_LOGIC_VECTOR(3 downto 0) := "0101";
 	constant JMP  : STD_LOGIC_VECTOR(3 downto 0) := "0110";
