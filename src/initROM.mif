@@ -9,8 +9,8 @@ CONTENT BEGIN
 2	: 0000000000000;	--
 3	: 0000000000000;	--
 4	: 0100000000101;	-- LDI $5   	Carrega o acumulador com valor 5
-5	: 0101100000000;	-- STA @256 	Armazena 5 na posição 256 da memória
-6	: 1000100000000;	-- CEQ @256 	A comparação deve fazer o flag_zero ser 1
+5	: 0101000000000;	-- STA @0 	Armazena 5 na posição 256 da memória
+6	: 1000000000000;	-- CEQ @0 	A comparação deve fazer o flag_zero ser 1
 7	: 0110000000001;	-- JMP @1   	Vai testar o flag_zero depois do jump
 8	: 0000000000000;	--
 9	: 0100000000100;	-- LDI $4   	Carrega acumulador com valor 4
