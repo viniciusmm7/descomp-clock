@@ -9,6 +9,6 @@ mnemonics = {
     "JEQ":  "7",
     "CEQ":  "8",
     "JSR":  "9",
-    "RET":  "A",
-    "AND":  "B",
+    "RET":  "10",
+    "AND":  "11",
 }
