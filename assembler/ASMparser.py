@@ -28,8 +28,6 @@ def get_asm_instruction(line: str):
     return line.split(';', 1)[0].strip()
 
 def get_asm_comment(line: str):
-    if not line:
-        return 'NOP'
     if ';' in line:
         asm_code, comment = line.split(';', 1)
         line = f'{asm_code}\t;{comment}'
@@ -61,8 +59,10 @@ def convert_9_bits_char(line: str, char: str, labels: dict = None):
     return result
 
 def translate_to_binary(line: str, labels: dict = None):
-    if 'NOP' in line:
-        return '0000000000000'
+    if 'RET' in line or 'AND' in line or 'NOP' in line:
+        mnemonic_hex_join_instru = add_mnemonic_hex_to_instruction(line)
+        asm_instruction = get_asm_instruction(mnemonic_hex_join_instru)
+        return asm_instruction.ljust(13, '0')
 
     mnemonic_hex_join_instru = add_mnemonic_hex_to_instruction(line)
     asm_instruction = get_asm_instruction(mnemonic_hex_join_instru)
@@ -75,6 +75,7 @@ def translate_to_binary(line: str, labels: dict = None):
 
     elif '.' in asm_instruction:
         return convert_9_bits_char(asm_instruction, '.', labels)
+    
 
 def format_bin_line(line: str):
     translation_dict = str.maketrans({ 't': '', 'm': '', 'p': '', '(': '', ')': '', '=': '', 'x': '', '"': '' })

@@ -1,34 +1,17 @@
-
-
-
-
-
-
-LOOP:
-
-
-
-
-
-
-    NOP
+;COMENTARIO TESTE 1
+    NOP ;COMENTARIO TESTE 2
     LDA $0
     STA @288
     ADD $1
+    AND ;COMENTARIO TESTE 3
     JMP .TEST
-
-
-
-
-
 
 TEST:
     JMP .TEST2
 
-
-
-
-
-
 TEST2:
-    JMP .LOOP
+    JSR .SUBROTINA_TESTE
+    JMP .TEST
+
+SUBROTINA_TESTE:
+    RET ;COMENTARIO TESTE 4
