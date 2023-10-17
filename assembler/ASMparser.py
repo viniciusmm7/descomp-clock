@@ -61,8 +61,8 @@ def convert_9_bits_char(line: str, char: str, labels: dict = None):
     return result
 
 def translate_to_binary(line: str, labels: dict = None):
-    if 'NOP' in line or ':' in line:
-        return None
+    if 'NOP' in line:
+        return '0000000000000'
 
     mnemonic_hex_join_instru = add_mnemonic_hex_to_instruction(line)
     asm_instruction = get_asm_instruction(mnemonic_hex_join_instru)

@@ -11,7 +11,7 @@ LOOP:
 
 
 
-
+    NOP
     LDA $0
     STA @288
     ADD $1
