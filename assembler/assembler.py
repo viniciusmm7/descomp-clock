@@ -10,6 +10,10 @@ PROJECT_PATH = '../src/'
 def convert_to_VHDL():
     with open(ASM, 'r') as asm_file, open(BIN, 'w+') as bin_file:
         lines = asm_file.readlines()
+        labels = find_labels(lines)
+
+        empty_lines = 0
+        label_counter = 0
 
         for counter, line in enumerate(lines):
             line = line.strip()
@@ -17,14 +21,16 @@ def convert_to_VHDL():
             comment = get_asm_comment(line)
 
             if not line:
-                line = 'NOP'
+                empty_lines += 1
+                continue
 
-            if 'NOP' in line:
-                instruction_binary = '0000000000000'
-            else:
-                instruction_binary = translate_to_binary(line)
+            if ':' in line:
+                label_counter += 1
+                continue
 
-            vhdl_line = f'tmp({counter})\t:= "{instruction_binary}";\t-- {comment}\n'
+            instruction_binary = translate_to_binary(line, labels)
+
+            vhdl_line = f'tmp({counter - empty_lines - label_counter})\t:= "{instruction_binary}";\t-- {comment}\n'
             bin_file.write(vhdl_line)
 
     asm_file.close()
