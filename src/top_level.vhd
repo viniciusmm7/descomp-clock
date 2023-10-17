@@ -7,7 +7,7 @@ entity top_level is
 		larguraDados            : natural := 8;
 		larguraEnderecos        : natural := 9;
 		larguraInstrucoes       : natural := 13;
-		simulacao               : boolean := TRUE -- para gravar na placa, altere de TRUE para FALSE
+		simulacao               : boolean := FALSE -- para gravar na placa, altere de TRUE para FALSE
 	);
 	port (
 		CLOCK_50      : in  STD_LOGIC;
