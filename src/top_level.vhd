@@ -14,8 +14,9 @@ entity top_level is
 		CLOCK         : in  STD_LOGIC;
 
 		PCOUT         : out STD_LOGIC_VECTOR((larguraEnderecos - 1) downto 0);
-		MEMIN         : out STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
-		MEMOUT        : out STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
+		DIN           : out STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
+		DOUT          : out STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
+		ADDR		  : out STD_LOGIC_VECTOR((larguraEnderecos - 1) downto 0);
 
 		SW            : in STD_LOGIC_VECTOR(9 downto 0);
 		KEY           : in STD_LOGIC_VECTOR(3 downto 0);
@@ -78,7 +79,7 @@ begin
 		CLK <= CLOCK;
 	else generate
 		detectorSub0: work.edgeDetector(bordaSubida)
-			port map (clk => CLOCK_50, entrada => (not CLOCK), saida => CLK);
+			port map (clk => CLOCK_50, entrada => (not KEY(3)), saida => CLK);
 	end generate;
 
 	CPU: entity work.processador
@@ -286,7 +287,8 @@ begin
 		);
 
 	PCOUT   <= ROM_address;
-	MEMOUT  <= data_wr_bus;
-	MEMIN   <= data_rd_bus;
+	DOUT    <= data_wr_bus;
+	DIN     <= data_rd_bus;
+	ADDR    <= data_addr_bus;
 
 end architecture;
