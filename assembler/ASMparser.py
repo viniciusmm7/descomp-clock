@@ -1,5 +1,7 @@
 from mnemonics import mnemonics
 
+SOLO_INSTRUCTIONS = ['NOP', 'RET', 'AND']
+
 def get_label_address(label: str, labels: dict):
     return labels[label]
 
@@ -58,8 +60,11 @@ def convert_9_bits_char(line: str, char: str, labels: dict = None):
     result = ''.join(line)
     return result
 
+def is_solo_instruction_in(line: str):
+    return any(solo_instruction in line for solo_instruction in SOLO_INSTRUCTIONS)
+
 def translate_to_binary(line: str, labels: dict = None):
-    if 'RET' in line or 'AND' in line or 'NOP' in line:
+    if is_solo_instruction_in(line):
         mnemonic_hex_join_instru = add_mnemonic_hex_to_instruction(line)
         asm_instruction = get_asm_instruction(mnemonic_hex_join_instru)
         return asm_instruction.ljust(13, '0')
