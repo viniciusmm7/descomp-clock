@@ -197,15 +197,25 @@ MOSTRA_CONTAGEM:
 
 MOSTRA_LIMITE:
 
-    LDA @57                     ; carrega o intervalo atual
-    CEQ @8                      ; verifica se é igual a 0
-    JEQ .INTERVALO_ZERO_ML      ; se for
-    JMP .INTERVALO_NAO_ZERO_ML	; se não for
+    LDA @57                 ; carrega o intervalo atual
+    CEQ @8                  ; verifica se é igual a 0
+    JEQ .INTERVALO_0_ML     ; se for
+	CEQ @9                  ; verifica se é igual a 1
+    JEQ .INTERVALO_1_ML     ; se for
+	CEQ @10                 ; verifica se é igual a 2
+    JEQ .INTERVALO_2_ML     ; se for
+	CEQ @11                 ; verifica se é igual a 3
+    JEQ .INTERVALO_3_ML     ; se for
+	CEQ @12                 ; verifica se é igual a 4
+    JEQ .INTERVALO_4_ML     ; se for
+    JMP .INTERVALO_5_ML 	; se não for nenhum dos acima
 
-	INTERVALO_ZERO_ML:
+	INTERVALO_0_ML:
 		LDA @320    ; carrega o valor das chaves
 		STA @288    ; armazena no HEX 0
+		LDA @59		; carrega o valor da dezena do limite
 		STA @289    ; armazena no HEX 1
+		LDA @60		; carrega o valor de centena do limite
 		STA @290    ; armazena no HEX 2
 		LDA @61     ; carrega o valor do milhar do limite
 		STA @291    ; armazena no HEX 3
@@ -215,17 +225,79 @@ MOSTRA_LIMITE:
 		STA @293    ; armazena no HEX 5
 		RET
 
-	INTERVALO_NAO_ZERO_ML:
-		LDA @320    ; carrega o valor das chaves
-		STA @291    ; armazena no HEX 3
-		STA @292    ; armazena no HEX 4
-		STA @293    ; armazena no HEX 5
+	INTERVALO_1_ML:
 		LDA @58     ; carrega o valor da unidade do limite
 		STA @288    ; armazena no HEX 0
-		LDA @59     ; carrega o valor da dezena do limite
+		LDA @320    ; carrega o valor das chaves
 		STA @289    ; armazena no HEX 1
 		LDA @60     ; carrega o valor da centena do limite
 		STA @290    ; armazena no HEX 2
+		LDA @61     ; carrega o valor do milhar do limite
+		STA @291    ; armazena no HEX 3
+		LDA @62     ; carrega o valor da dezena de milhar do limite
+		STA @292    ; armazena no HEX 4
+		LDA @63     ; carrega o valor da centena de milhar do limite
+		STA @293    ; armazena no HEX 5
+		RET
+
+	INTERVALO_2_ML:
+		LDA @58     ; carrega o valor da unidade do limite
+		STA @288    ; armazena no HEX 0
+		LDA @59		; carrega o valor da dezena do limite
+		STA @289    ; armazena no HEX 1
+		LDA @320    ; carrega o valor das chaves
+		STA @290    ; armazena no HEX 2
+		LDA @61     ; carrega o valor do milhar do limite
+		STA @291    ; armazena no HEX 3
+		LDA @62     ; carrega o valor da dezena de milhar do limite
+		STA @292    ; armazena no HEX 4
+		LDA @63     ; carrega o valor da centena de milhar do limite
+		STA @293    ; armazena no HEX 5
+		RET
+
+	INTERVALO_3_ML:
+		LDA @58     ; carrega o valor da unidade do limite
+		STA @288    ; armazena no HEX 0
+		LDA @59		; carrega o valor da dezena do limite
+		STA @289    ; armazena no HEX 1
+		LDA @60    	; carrega o valor da centena do limite
+		STA @290    ; armazena no HEX 2
+		LDA @320    ; carrega o valor das chaves
+		STA @291    ; armazena no HEX 3
+		LDA @62     ; carrega o valor da dezena de milhar do limite
+		STA @292    ; armazena no HEX 4
+		LDA @63     ; carrega o valor da centena de milhar do limite
+		STA @293    ; armazena no HEX 5
+		RET
+
+	INTERVALO_4_ML:
+		LDA @58     ; carrega o valor da unidade do limite
+		STA @288    ; armazena no HEX 0
+		LDA @59		; carrega o valor da dezena do limite
+		STA @289    ; armazena no HEX 1
+		LDA @60    	; carrega o valor da centena do limite
+		STA @290    ; armazena no HEX 2
+		LDA @61     ; carrega o valor do milhar do limite
+		STA @291    ; armazena no HEX 3
+		LDA @320    ; carrega o valor das chaves
+		STA @292    ; armazena no HEX 4
+		LDA @63     ; carrega o valor da centena de milhar do limite
+		STA @293    ; armazena no HEX 5
+		RET
+
+	INTERVALO_5_ML:
+		LDA @58     ; carrega o valor da unidade do limite
+		STA @288    ; armazena no HEX 0
+		LDA @59		; carrega o valor da dezena do limite
+		STA @289    ; armazena no HEX 1
+		LDA @60    	; carrega o valor da centena do limite
+		STA @290    ; armazena no HEX 2
+		LDA @61     ; carrega o valor do milhar do limite
+		STA @291    ; armazena no HEX 3
+		LDA @62     ; carrega o valor da dezena de milhar do limite
+		STA @292    ; armazena no HEX 4
+		LDA @320     ; carrega o valor das chaves
+		STA @293    ; armazena no HEX 5
 		RET
 
 

@@ -48,7 +48,7 @@ CONTENT BEGIN
 41	: 1000000001000;	-- CEQ @8      	 verifica se é 0
 42	: 0111000101110;	-- JEQ .PULA_CONFIG
 43	: 0101111111110;	-- STA @510
-44	: 1001010110001;	-- JSR .MUDA_INTERVALO
+44	: 1001011110001;	-- JSR .MUDA_INTERVALO
 45	: 0110000110111;	-- JMP .LOOP_CONFIGURACAO_LIMITE
 46	: 0001101100000;	-- LDA @352    	 carrega o valor do botão 0
 47	: 1011000000110;	-- AND @6      	 aplica a mask
@@ -56,7 +56,7 @@ CONTENT BEGIN
 49	: 0111000110100;	-- JEQ .PULA_INCREMENTA_CONTAGEM
 50	: 0101111111111;	-- STA @511
 51	: 1001001010100;	-- JSR .INCREMENTA_CONTAGEM
-52	: 1001010101100;	-- JSR .APAGA_LEDS         	 apaga os LEDs
+52	: 1001011101100;	-- JSR .APAGA_LEDS         	 apaga os LEDs
 53	: 1001010000101;	-- JSR .MOSTRA_CONTAGEM    	 escreve os números da contagem nos displays
 54	: 0110000100001;	-- JMP .LOOP_PRINCIPAL
 55	: 0001101100100;	-- LDA @356    	 carrega o valor do botão reset
@@ -74,7 +74,7 @@ CONTENT BEGIN
 67	: 1000000001000;	-- CEQ @8      	 verifica se é 0
 68	: 0111001000111;	-- JEQ .PULA_MUDANCA_INTERVALO
 69	: 0101111111111;	-- STA @511
-70	: 1001010110001;	-- JSR .MUDA_INTERVALO
+70	: 1001011110001;	-- JSR .MUDA_INTERVALO
 71	: 1001010010010;	-- JSR .MOSTRA_LIMITE
 72	: 0110000110111;	-- JMP .LOOP_CONFIGURACAO_LIMITE
 73	: 0100000000101;	-- LDI $5    		 carrega 5
@@ -150,97 +150,161 @@ CONTENT BEGIN
 143	: 0001000000101;	-- LDA @5      	 carrega o valor da centena de milhar
 144	: 0101100100101;	-- STA @293    	 armazena no HEX 5
 145	: 1010000000000;	-- RET
-146	: 0001000111001;	-- LDA @57                     	 carrega o intervalo atual
-147	: 1000000001000;	-- CEQ @8                      	 verifica se é igual a 0
-148	: 0111010010110;	-- JEQ .INTERVALO_ZERO_ML      	 se for
-149	: 0110010100001;	-- JMP .INTERVALO_NAO_ZERO_ML		 se não for
-150	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
-151	: 0101100100000;	-- STA @288    	 armazena no HEX 0
-152	: 0101100100001;	-- STA @289    	 armazena no HEX 1
-153	: 0101100100010;	-- STA @290    	 armazena no HEX 2
-154	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
-155	: 0101100100011;	-- STA @291    	 armazena no HEX 3
-156	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
-157	: 0101100100100;	-- STA @292    	 armazena no HEX 4
-158	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
-159	: 0101100100101;	-- STA @293    	 armazena no HEX 5
-160	: 1010000000000;	-- RET
-161	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
-162	: 0101100100011;	-- STA @291    	 armazena no HEX 3
-163	: 0101100100100;	-- STA @292    	 armazena no HEX 4
-164	: 0101100100101;	-- STA @293    	 armazena no HEX 5
-165	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
-166	: 0101100100000;	-- STA @288    	 armazena no HEX 0
-167	: 0001000111011;	-- LDA @59     	 carrega o valor da dezena do limite
-168	: 0101100100001;	-- STA @289    	 armazena no HEX 1
-169	: 0001000111100;	-- LDA @60     	 carrega o valor da centena do limite
-170	: 0101100100010;	-- STA @290    	 armazena no HEX 2
-171	: 1010000000000;	-- RET
-172	: 0100000000000;	-- LDI $0
-173	: 0101100000000;	-- STA @256
-174	: 0101100000001;	-- STA @257
-175	: 0101100000010;	-- STA @258
-176	: 1010000000000;	-- RET
-177	: 0001000111001;	-- LDA @57                 	 carrega o intervalo atual
-178	: 1000000001000;	-- CEQ @8                  	 verifica se é igual a 0
-179	: 0111010111101;	-- JEQ .INTERVALO_0_MI     	 se for
-180	: 1000000001001;	-- CEQ @9                  	 verifica se é igual a 1
-181	: 0111011000101;	-- JEQ .INTERVALO_1_MI     	 se for
-182	: 1000000001010;	-- CEQ @10                 	 verifica se é igual a 2
-183	: 0111011001101;	-- JEQ .INTERVALO_2_MI     	 se for
-184	: 1000000001011;	-- CEQ @11                 	 verifica se é igual a 3
-185	: 0111011010101;	-- JEQ .INTERVALO_3_MI     	 se for
-186	: 1000000001100;	-- CEQ @12                 	 verifica se é igual a 4
-187	: 0111011011110;	-- JEQ .INTERVALO_4_MI     	 se for
-188	: 0110011100110;	-- JMP .INTERVALO_5_MI 		 se não for nenhum dos acima
-189	: 0100000000001;	-- LDI $1			 atualiza o intervalo
-190	: 0101000111001;	-- STA @57
-191	: 0100000000110;	-- LDI $6			 acende os LEDs da segunda posição e apaga o resto
-192	: 0101100000000;	-- STA @256
-193	: 0100000000000;	-- LDI $0
-194	: 0101100000001;	-- STA @257
-195	: 0101100000010;	-- STA @258
+146	: 0001000111001;	-- LDA @57                 	 carrega o intervalo atual
+147	: 1000000001000;	-- CEQ @8                  	 verifica se é igual a 0
+148	: 0111010011110;	-- JEQ .INTERVALO_0_ML     	 se for
+149	: 1000000001001;	-- CEQ @9                  	 verifica se é igual a 1
+150	: 0111010101011;	-- JEQ .INTERVALO_1_ML     	 se for
+151	: 1000000001010;	-- CEQ @10                 	 verifica se é igual a 2
+152	: 0111010111000;	-- JEQ .INTERVALO_2_ML     	 se for
+153	: 1000000001011;	-- CEQ @11                 	 verifica se é igual a 3
+154	: 0111011000101;	-- JEQ .INTERVALO_3_ML     	 se for
+155	: 1000000001100;	-- CEQ @12                 	 verifica se é igual a 4
+156	: 0111011010010;	-- JEQ .INTERVALO_4_ML     	 se for
+157	: 0110011011111;	-- JMP .INTERVALO_5_ML 		 se não for nenhum dos acima
+158	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
+159	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+160	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
+161	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+162	: 0001000111100;	-- LDA @60			 carrega o valor de centena do limite
+163	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+164	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
+165	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+166	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
+167	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+168	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
+169	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+170	: 1010000000000;	-- RET
+171	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
+172	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+173	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
+174	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+175	: 0001000111100;	-- LDA @60     	 carrega o valor da centena do limite
+176	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+177	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
+178	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+179	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
+180	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+181	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
+182	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+183	: 1010000000000;	-- RET
+184	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
+185	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+186	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
+187	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+188	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
+189	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+190	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
+191	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+192	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
+193	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+194	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
+195	: 0101100100101;	-- STA @293    	 armazena no HEX 5
 196	: 1010000000000;	-- RET
-197	: 0100000000010;	-- LDI $2			 atualiza o intervalo
-198	: 0101000111001;	-- STA @57
-199	: 0100000011000;	-- LDI $24			 acende os LEDs da terceira posição e apaga o resto
-200	: 0101100000000;	-- STA @256
-201	: 0100000000000;	-- LDI $0
-202	: 0101100000001;	-- STA @257
-203	: 0101100000010;	-- STA @258
-204	: 1010000000000;	-- RET
-205	: 0100000000011;	-- LDI $3			 atualiza o intervalo
-206	: 0101000111001;	-- STA @57
-207	: 0100001100000;	-- LDI $96			 acende os LEDs da quarta posição e apaga o resto
-208	: 0101100000000;	-- STA @256
-209	: 0100000000000;	-- LDI $0
-210	: 0101100000001;	-- STA @257
-211	: 0101100000010;	-- STA @258
-212	: 1010000000000;	-- RET
-213	: 0100000000100;	-- LDI $4			 atualiza o intervalo
-214	: 0101000111001;	-- STA @57
-215	: 0100010000000;	-- LDI $128		 acende os LEDs da quinta posição e apaga o resto
-216	: 0101100000000;	-- STA @256
-217	: 0100000000001;	-- LDI $1
-218	: 0101100000001;	-- STA @257
-219	: 0100000000000;	-- LDI $0
-220	: 0101100000010;	-- STA @258
-221	: 1010000000000;	-- RET
-222	: 0100000000101;	-- LDI $5			 atualiza o intervalo
-223	: 0101000111001;	-- STA @57
-224	: 0100000000000;	-- LDI $0			 acende os LEDs da sexta posição e apaga o resto
-225	: 0101100000000;	-- STA @256
-226	: 0100000000001;	-- LDI $1
-227	: 0101100000001;	-- STA @257
-228	: 0101100000010;	-- STA @258
-229	: 1010000000000;	-- RET
-230	: 0100000000000;	-- LDI $0			 atualiza o intervalo
-231	: 0101000111001;	-- STA @57
-232	: 0100000000011;	-- LDI $3			 acende os LEDs da primeira posição e apaga o resto
-233	: 0101100000000;	-- STA @256
-234	: 0100000000000;	-- LDI $0
-235	: 0101100000001;	-- STA @257
-236	: 0101100000010;	-- STA @258
-237	: 1010000000000;	-- RET
-[238..511]	:	0000000000000;
+197	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
+198	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+199	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
+200	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+201	: 0001000111100;	-- LDA @60    		 carrega o valor da centena do limite
+202	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+203	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
+204	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+205	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
+206	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+207	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
+208	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+209	: 1010000000000;	-- RET
+210	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
+211	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+212	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
+213	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+214	: 0001000111100;	-- LDA @60    		 carrega o valor da centena do limite
+215	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+216	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
+217	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+218	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
+219	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+220	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
+221	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+222	: 1010000000000;	-- RET
+223	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
+224	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+225	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
+226	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+227	: 0001000111100;	-- LDA @60    		 carrega o valor da centena do limite
+228	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+229	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
+230	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+231	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
+232	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+233	: 0001101000000;	-- LDA @320     	 carrega o valor das chaves
+234	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+235	: 1010000000000;	-- RET
+236	: 0100000000000;	-- LDI $0
+237	: 0101100000000;	-- STA @256
+238	: 0101100000001;	-- STA @257
+239	: 0101100000010;	-- STA @258
+240	: 1010000000000;	-- RET
+241	: 0001000111001;	-- LDA @57                 	 carrega o intervalo atual
+242	: 1000000001000;	-- CEQ @8                  	 verifica se é igual a 0
+243	: 0111011111101;	-- JEQ .INTERVALO_0_MI     	 se for
+244	: 1000000001001;	-- CEQ @9                  	 verifica se é igual a 1
+245	: 0111100000101;	-- JEQ .INTERVALO_1_MI     	 se for
+246	: 1000000001010;	-- CEQ @10                 	 verifica se é igual a 2
+247	: 0111100001101;	-- JEQ .INTERVALO_2_MI     	 se for
+248	: 1000000001011;	-- CEQ @11                 	 verifica se é igual a 3
+249	: 0111100010101;	-- JEQ .INTERVALO_3_MI     	 se for
+250	: 1000000001100;	-- CEQ @12                 	 verifica se é igual a 4
+251	: 0111100011110;	-- JEQ .INTERVALO_4_MI     	 se for
+252	: 0110100100110;	-- JMP .INTERVALO_5_MI 		 se não for nenhum dos acima
+253	: 0100000000001;	-- LDI $1			 atualiza o intervalo
+254	: 0101000111001;	-- STA @57
+255	: 0100000000110;	-- LDI $6			 acende os LEDs da segunda posição e apaga o resto
+256	: 0101100000000;	-- STA @256
+257	: 0100000000000;	-- LDI $0
+258	: 0101100000001;	-- STA @257
+259	: 0101100000010;	-- STA @258
+260	: 1010000000000;	-- RET
+261	: 0100000000010;	-- LDI $2			 atualiza o intervalo
+262	: 0101000111001;	-- STA @57
+263	: 0100000011000;	-- LDI $24			 acende os LEDs da terceira posição e apaga o resto
+264	: 0101100000000;	-- STA @256
+265	: 0100000000000;	-- LDI $0
+266	: 0101100000001;	-- STA @257
+267	: 0101100000010;	-- STA @258
+268	: 1010000000000;	-- RET
+269	: 0100000000011;	-- LDI $3			 atualiza o intervalo
+270	: 0101000111001;	-- STA @57
+271	: 0100001100000;	-- LDI $96			 acende os LEDs da quarta posição e apaga o resto
+272	: 0101100000000;	-- STA @256
+273	: 0100000000000;	-- LDI $0
+274	: 0101100000001;	-- STA @257
+275	: 0101100000010;	-- STA @258
+276	: 1010000000000;	-- RET
+277	: 0100000000100;	-- LDI $4			 atualiza o intervalo
+278	: 0101000111001;	-- STA @57
+279	: 0100010000000;	-- LDI $128		 acende os LEDs da quinta posição e apaga o resto
+280	: 0101100000000;	-- STA @256
+281	: 0100000000001;	-- LDI $1
+282	: 0101100000001;	-- STA @257
+283	: 0100000000000;	-- LDI $0
+284	: 0101100000010;	-- STA @258
+285	: 1010000000000;	-- RET
+286	: 0100000000101;	-- LDI $5			 atualiza o intervalo
+287	: 0101000111001;	-- STA @57
+288	: 0100000000000;	-- LDI $0			 acende os LEDs da sexta posição e apaga o resto
+289	: 0101100000000;	-- STA @256
+290	: 0100000000001;	-- LDI $1
+291	: 0101100000001;	-- STA @257
+292	: 0101100000010;	-- STA @258
+293	: 1010000000000;	-- RET
+294	: 0100000000000;	-- LDI $0			 atualiza o intervalo
+295	: 0101000111001;	-- STA @57
+296	: 0100000000011;	-- LDI $3			 acende os LEDs da primeira posição e apaga o resto
+297	: 0101100000000;	-- STA @256
+298	: 0100000000000;	-- LDI $0
+299	: 0101100000001;	-- STA @257
+300	: 0101100000010;	-- STA @258
+301	: 1010000000000;	-- RET
+[302..511]	:	0000000000000;
 END;
