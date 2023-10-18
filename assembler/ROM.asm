@@ -17,23 +17,57 @@ STA @6      ; armazena o valor de incremento
 LDI $10     ; carrega o valor máximo por casa possível
 STA @7      ; armazena o valor máximo por casa possível
 
-LOOP:
+LOOP_PRINCIPAL:
+
     LDA @356    ; carrega o valor do botão reset
     AND @6      ; aplica a mask
     CEQ @8      ; verifica se é 0
     JEQ .PULA_RESET
     STA @509
     JSR .RESET
+
     PULA_RESET:
+    LDA @353    ; carrega o valor do botão 1
+    AND @6      ; aplica a mask
+    CEQ @8      ; verifica se é 0
+    JEQ .PULA_CONFIG
+    STA @510
+    JMP .LOOP_CONFIGURACAO_LIMITE
+
+    PULA_CONFIG:
     LDA @352    ; carrega o valor do botão 0
     AND @6      ; aplica a mask
     CEQ @8      ; verifica se é 0
     JEQ .PULA_INCREMENTA_CONTAGEM
     STA @511
     JSR .INCREMENTA_CONTAGEM
+
     PULA_INCREMENTA_CONTAGEM:
-    JSR .ATUALIZA_DISPLAYS
-    JMP .LOOP
+    LDI $0                  ; define se apaga ou acende os LEDS
+    JSR .MODIFICA_LEDS      ; apaga os LEDs
+    JSR .MOSTRA_CONTAGEM    ; escreve os números da contagem nos displays
+    JMP .LOOP_PRINCIPAL
+
+LOOP_CONFIGURACAO_LIMITE:
+
+    LDA @356    ; carrega o valor do botão reset
+    AND @6      ; aplica a mask
+    CEQ @6      ; verifica se é 1
+    JEQ .LOOP_PRINCIPAL
+
+    LDA @353    ; carrega o valor do botão 1
+    AND @6      ; aplica a mask
+    CEQ @8      ; verifica se é 0
+    JEQ .PULA_MUDANCA
+    STA @510
+    STA @511
+    JMP .LOOP_PRINCIPAL
+
+    PULA_MUDANCA:
+    LDI $255
+    JSR .MODIFICA_LEDS
+
+    JMP .LOOP_CONFIGURACAO_LIMITE
 
 FIM:
 JMP .FIM
@@ -112,7 +146,7 @@ INCREMENTA_CONTAGEM:
         STA $5  ; armazena 0 na centena de milhar
         JMP .FIM_INCREMENTA
 
-ATUALIZA_DISPLAYS:
+MOSTRA_CONTAGEM:
     LDA @0      ; carrega o valor da unidade
     STA @288    ; armazena o 0 no HEX 0
     LDA @1      ; carrega o valor da dezena
@@ -125,4 +159,12 @@ ATUALIZA_DISPLAYS:
     STA @292    ; armazena o 0 no HEX 4
     LDA @5      ; carrega o valor da centena de milhar
     STA @293    ; armazena o 0 no HEX 5
+    RET
+
+
+
+MODIFICA_LEDS:
+    STA @256
+    STA @257
+    STA @258
     RET
