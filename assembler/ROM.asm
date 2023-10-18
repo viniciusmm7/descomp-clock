@@ -5,6 +5,7 @@ STA @511    ; reseta a leitura do key 0
 STA @510    ; reseta a leitura do key 1
 STA @509    ; reseta a leitura do key reset
 LDI $0      ; carrega o valor inicial das casas
+STA @57     ; intervalo numérico de configuração
 STA @0      ; armazena 0 na unidade
 STA @1      ; armazena 0 na dezena
 STA @2      ; armazena 0 na centena
@@ -30,8 +31,6 @@ LDI $3		; carrega 3 para inicializar próximo endereço de referência do interv
 STA @11		; armazena a referência de estado 3 no endereço 11
 LDI $4		; carrega 4 para inicializar próximo endereço de referência do intervalo numérico de configuração
 STA @12		; armazena a referência de estado 4 no endereço 12
-LDI $5		; carrega 5 como valor inicial do intervalo numérico de configuração
-STA @57     ; intervalo numérico de configuração
 
 
 LOOP_PRINCIPAL:
@@ -49,8 +48,7 @@ LOOP_PRINCIPAL:
     CEQ @8      ; verifica se é 0
     JEQ .PULA_CONFIG
     STA @510
-    JSR .MUDA_INTERVALO
-    JMP .LOOP_CONFIGURACAO_LIMITE
+    JMP .INICIO_LOOP_CONFIGURACAO_LIMITE
 
     PULA_CONFIG:
     LDA @352    ; carrega o valor do botão 0
@@ -65,7 +63,9 @@ LOOP_PRINCIPAL:
     JSR .MOSTRA_CONTAGEM    ; escreve os números da contagem nos displays
     JMP .LOOP_PRINCIPAL
 
-
+INICIO_LOOP_CONFIGURACAO_LIMITE:
+LDI $3		; acende os leds da primeira posição
+STA @256	
 
 LOOP_CONFIGURACAO_LIMITE:
 
@@ -94,8 +94,8 @@ LOOP_CONFIGURACAO_LIMITE:
     JMP .LOOP_CONFIGURACAO_LIMITE
 
     SAIR_LOOP_CONFIGURACAO_LIMITE:
-    LDI $5    	; carrega 5
-    STA @57     ; armazena 5 no intervalo de mudança atual
+    LDI $0    	; carrega 0
+    STA @57     ; armazena 0 no intervalo de mudança atual
     JMP .LOOP_PRINCIPAL
 
 
@@ -199,18 +199,18 @@ MOSTRA_LIMITE:
 
     LDA @57                 ; carrega o intervalo atual
     CEQ @8                  ; verifica se é igual a 0
-    JEQ .INTERVALO_0_ML     ; se for
+    JEQ .DIGITO_0_ML     ; se for
 	CEQ @9                  ; verifica se é igual a 1
-    JEQ .INTERVALO_1_ML     ; se for
+    JEQ .DIGITO_1_ML     ; se for
 	CEQ @10                 ; verifica se é igual a 2
-    JEQ .INTERVALO_2_ML     ; se for
+    JEQ .DIGITO_2_ML     ; se for
 	CEQ @11                 ; verifica se é igual a 3
-    JEQ .INTERVALO_3_ML     ; se for
+    JEQ .DIGITO_3_ML     ; se for
 	CEQ @12                 ; verifica se é igual a 4
-    JEQ .INTERVALO_4_ML     ; se for
-    JMP .INTERVALO_5_ML 	; se não for nenhum dos acima
+    JEQ .DIGITO_4_ML     ; se for
+    JMP .DIGITO_5_ML 	; se não for nenhum dos acima
 
-	INTERVALO_0_ML:
+	DIGITO_0_ML:
 		LDA @320    ; carrega o valor das chaves
 		STA @288    ; armazena no HEX 0
 		LDA @59		; carrega o valor da dezena do limite
@@ -225,7 +225,7 @@ MOSTRA_LIMITE:
 		STA @293    ; armazena no HEX 5
 		RET
 
-	INTERVALO_1_ML:
+	DIGITO_1_ML:
 		LDA @58     ; carrega o valor da unidade do limite
 		STA @288    ; armazena no HEX 0
 		LDA @320    ; carrega o valor das chaves
@@ -240,7 +240,7 @@ MOSTRA_LIMITE:
 		STA @293    ; armazena no HEX 5
 		RET
 
-	INTERVALO_2_ML:
+	DIGITO_2_ML:
 		LDA @58     ; carrega o valor da unidade do limite
 		STA @288    ; armazena no HEX 0
 		LDA @59		; carrega o valor da dezena do limite
@@ -255,7 +255,7 @@ MOSTRA_LIMITE:
 		STA @293    ; armazena no HEX 5
 		RET
 
-	INTERVALO_3_ML:
+	DIGITO_3_ML:
 		LDA @58     ; carrega o valor da unidade do limite
 		STA @288    ; armazena no HEX 0
 		LDA @59		; carrega o valor da dezena do limite
@@ -270,7 +270,7 @@ MOSTRA_LIMITE:
 		STA @293    ; armazena no HEX 5
 		RET
 
-	INTERVALO_4_ML:
+	DIGITO_4_ML:
 		LDA @58     ; carrega o valor da unidade do limite
 		STA @288    ; armazena no HEX 0
 		LDA @59		; carrega o valor da dezena do limite
@@ -285,7 +285,7 @@ MOSTRA_LIMITE:
 		STA @293    ; armazena no HEX 5
 		RET
 
-	INTERVALO_5_ML:
+	DIGITO_5_ML:
 		LDA @58     ; carrega o valor da unidade do limite
 		STA @288    ; armazena no HEX 0
 		LDA @59		; carrega o valor da dezena do limite
@@ -315,18 +315,18 @@ MUDA_INTERVALO:
 
     LDA @57                 ; carrega o intervalo atual
     CEQ @8                  ; verifica se é igual a 0
-    JEQ .INTERVALO_0_MI     ; se for
+    JEQ .DIGITO_0_MI     	; se for
 	CEQ @9                  ; verifica se é igual a 1
-    JEQ .INTERVALO_1_MI     ; se for
+    JEQ .DIGITO_1_MI     	; se for
 	CEQ @10                 ; verifica se é igual a 2
-    JEQ .INTERVALO_2_MI     ; se for
+    JEQ .DIGITO_2_MI     	; se for
 	CEQ @11                 ; verifica se é igual a 3
-    JEQ .INTERVALO_3_MI     ; se for
+    JEQ .DIGITO_3_MI     	; se for
 	CEQ @12                 ; verifica se é igual a 4
-    JEQ .INTERVALO_4_MI     ; se for
-    JMP .INTERVALO_5_MI 	; se não for nenhum dos acima
+    JEQ .DIGITO_4_MI     	; se for
+    JMP .DIGITO_5_MI 		; se não for nenhum dos acima
 
-    INTERVALO_0_MI:
+    DIGITO_0_MI:
     LDI $1		; atualiza o intervalo
     STA @57	
 	LDI $6		; acende os LEDs da segunda posição e apaga o resto	
@@ -334,9 +334,11 @@ MUDA_INTERVALO:
     LDI $0
     STA @257
     STA @258
+	LDA @320	; salva o novo valor do dígito
+	STA @58
     RET
 
-    INTERVALO_1_MI:
+    DIGITO_1_MI:
     LDI $2		; atualiza o intervalo
     STA @57	
 	LDI $24		; acende os LEDs da terceira posição e apaga o resto	
@@ -344,9 +346,11 @@ MUDA_INTERVALO:
     LDI $0
     STA @257
     STA @258
+	LDA @320	; salva o novo valor do dígito
+	STA @59
     RET
 
-	INTERVALO_2_MI:
+	DIGITO_2_MI:
     LDI $3		; atualiza o intervalo
     STA @57	
 	LDI $96		; acende os LEDs da quarta posição e apaga o resto	
@@ -354,9 +358,11 @@ MUDA_INTERVALO:
     LDI $0
     STA @257
     STA @258
+	LDA @320	; salva o novo valor do dígito
+	STA @60
     RET
 
-	INTERVALO_3_MI:
+	DIGITO_3_MI:
     LDI $4		; atualiza o intervalo
     STA @57	
 	LDI $128	; acende os LEDs da quinta posição e apaga o resto	
@@ -365,9 +371,11 @@ MUDA_INTERVALO:
     STA @257
 	LDI $0
     STA @258
+	LDA @320	; salva o novo valor do dígito
+	STA @61
     RET
 
-	INTERVALO_4_MI:
+	DIGITO_4_MI:
     LDI $5		; atualiza o intervalo
     STA @57	
 	LDI $0		; acende os LEDs da sexta posição e apaga o resto	
@@ -375,9 +383,11 @@ MUDA_INTERVALO:
     LDI $1
     STA @257
     STA @258
+	LDA @320	; salva o novo valor do dígito
+	STA @62
     RET
 
-	INTERVALO_5_MI:
+	DIGITO_5_MI:
     LDI $0		; atualiza o intervalo
     STA @57	
 	LDI $3		; acende os LEDs da primeira posição e apaga o resto	
@@ -385,4 +395,6 @@ MUDA_INTERVALO:
     LDI $0
     STA @257
     STA @258
+	LDA @320	; salva o novo valor do dígito
+	STA @63
     RET
