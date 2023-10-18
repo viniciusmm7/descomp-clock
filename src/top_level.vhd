@@ -7,7 +7,7 @@ entity top_level is
 		larguraDados            : natural := 8;
 		larguraEnderecos        : natural := 9;
 		larguraInstrucoes       : natural := 13;
-		simulacao               : boolean := FALSE -- para gravar na placa, altere de TRUE para FALSE
+		simulacao               : boolean := TRUE -- para gravar na placa, altere de TRUE para FALSE
 	);
 	port (
 		CLOCK_50      : in  STD_LOGIC;
@@ -69,6 +69,7 @@ architecture arquitetura of top_level is
 
 	signal clear_key_0  : STD_LOGIC;
 	signal clear_key_1  : STD_LOGIC;
+	signal clear_key_r  : STD_LOGIC;
 
 begin
 
@@ -76,7 +77,7 @@ begin
 
 	-- Para simular, fica mais simples tirar o edgeDetector
 	gravar:  if simulacao generate
-		CLK <= CLOCK;
+		CLK <= CLOCK_50;
 	else generate
 		detectorSub0: work.edgeDetector(bordaSubida)
 			port map (clk => CLOCK_50, entrada => (not KEY(3)), saida => CLK);
@@ -149,7 +150,8 @@ begin
 			HAB_KEY_3   => hab_key_3,
 			HAB_KEY_R   => hab_key_r,
 			CLEAR_KEY_0 => clear_key_0,
-			CLEAR_KEY_1 => clear_key_1
+			CLEAR_KEY_1 => clear_key_1,
+			CLEAR_KEY_R => clear_key_r
 		);
 
 	LED_0_REG: entity work.registradorGenerico
@@ -279,11 +281,13 @@ begin
 			saida     => data_rd_bus(0)
 		);
 
-	KEY_R: entity work.bufferTriState
+	KEY_R: entity work.keyUnit
 		port map (
-			entrada   => FPGA_RESET_N,
-			habilita  => hab_key_r,
-			saida     => data_rd_bus(0)
+			CLK       => CLK,
+			CLEAR     => clear_key_r,
+			HABILITA  => hab_key_r,
+			BUTTON    => FPGA_RESET_N,
+			OUTPUT    => data_rd_bus(0)
 		);
 
 	PCOUT   <= ROM_address;

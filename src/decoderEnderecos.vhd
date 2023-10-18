@@ -25,7 +25,8 @@ entity decoderEnderecos is
     HAB_KEY_3   : out STD_LOGIC;
     HAB_KEY_R   : out STD_LOGIC;
     CLEAR_KEY_0 : out STD_LOGIC;
-    CLEAR_KEY_1 : out STD_LOGIC
+    CLEAR_KEY_1 : out STD_LOGIC;
+    CLEAR_KEY_R : out STD_LOGIC
   );
 end entity;
 
@@ -67,6 +68,7 @@ architecture comportamento of decoderEnderecos is
   HAB_KEY_3   <= RD and decoder_addr_out(3) and decoder_bloco_out(5) and ADDRESS(5);
   HAB_KEY_R   <= RD and decoder_addr_out(4) and decoder_bloco_out(5) and ADDRESS(5);
 
+  CLEAR_KEY_R <= WR and ADDRESS(0) and not ADDRESS(1) and ADDRESS(2) and ADDRESS(3) and ADDRESS(4) and ADDRESS(5) and ADDRESS(6) and ADDRESS(7);
   CLEAR_KEY_1 <= WR and not ADDRESS(0) and ADDRESS(1) and ADDRESS(2) and ADDRESS(3) and ADDRESS(4) and ADDRESS(5) and ADDRESS(6) and ADDRESS(7);
   CLEAR_KEY_0 <= WR and ADDRESS(0) and ADDRESS(1) and ADDRESS(2) and ADDRESS(3) and ADDRESS(4) and ADDRESS(5) and ADDRESS(6) and ADDRESS(7);
 
