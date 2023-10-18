@@ -106,7 +106,10 @@ LOOP_CONFIGURACAO_LIMITE:
     JMP .LOOP_CONFIGURACAO_LIMITE
 
     SAIR_LOOP_CONFIGURACAO_LIMITE:
+
 	JSR .APAGA_LEDS         ; apaga os LEDs
+	JSR .ARMAZENA_LIMITE	; armazena o limite do jeito que mostra nos displays
+
     LDI $0    	; carrega 0
     STA @57     ; armazena 0 no intervalo de mudança atual
     JMP .LOOP_PRINCIPAL
@@ -471,3 +474,49 @@ ATINGIU_LIMITE:
 	STA @258
 	LDI $1
 	RET
+
+
+ARMAZENA_LIMITE:
+
+	LDA @57                 ; carrega o digito atual
+    CEQ @8                  ; verifica se é igual a 0
+    JEQ .DIGITO_0_AL     	; se for
+	CEQ @9                  ; verifica se é igual a 1
+    JEQ .DIGITO_1_AL     	; se for
+	CEQ @10                 ; verifica se é igual a 2
+    JEQ .DIGITO_2_AL     	; se for
+	CEQ @11                 ; verifica se é igual a 3
+    JEQ .DIGITO_3_AL     	; se for
+	CEQ @12                 ; verifica se é igual a 4
+    JEQ .DIGITO_4_AL     	; se for
+    JMP .DIGITO_5_AL 		; se não for nenhum dos acima
+
+    DIGITO_0_AL:
+    LDA @320	; carrega o valor dos switches
+	STA @58		; armazena na unidade do limite
+    RET
+
+    DIGITO_1_AL:
+    LDA @320	; carrega o valor dos switches
+	STA @59		; armazena na dezena do limite
+    RET
+
+	DIGITO_2_AL:
+    LDA @320	; carrega o valor dos switches
+	STA @60		; armazena na centena do limite
+    RET
+
+	DIGITO_3_AL:
+    LDA @320	; carrega o valor dos switches
+	STA @61		; armazena no milhar do limite
+    RET
+
+	DIGITO_4_AL:
+    LDA @320	; carrega o valor dos switches
+	STA @62		; armazena na dezena de milhar do limite
+    RET
+
+	DIGITO_5_AL:
+    LDA @320	; carrega o valor dos switches
+	STA @63		; armazena na centena de milhar do limite
+    RET
