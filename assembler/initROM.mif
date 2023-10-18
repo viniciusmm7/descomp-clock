@@ -5,318 +5,353 @@ DATA_RADIX=BIN;
 
 CONTENT BEGIN
 0	: 0000000000000;	-- 	 SETUP
-1	: 0000000000000;	-- NOP
-2	: 0101111111111;	-- STA @511    	 reseta a leitura do key 0
-3	: 0101111111110;	-- STA @510    	 reseta a leitura do key 1
-4	: 0101111111101;	-- STA @509    	 reseta a leitura do key reset
-5	: 0100000000000;	-- LDI $0      	 carrega o valor inicial das casas
-6	: 0101000111001;	-- STA @57     	 intervalo numérico de configuração
-7	: 0101000000000;	-- STA @0      	 armazena 0 na unidade
-8	: 0101000000001;	-- STA @1      	 armazena 0 na dezena
-9	: 0101000000010;	-- STA @2      	 armazena 0 na centena
-10	: 0101000000011;	-- STA @3      	 armazena 0 no milhar
-11	: 0101000000100;	-- STA @4      	 armazena 0 na dezena de milhar
-12	: 0101000000101;	-- STA @5      	 armazena 0 na centena de milhar
-13	: 0101000001000;	-- STA @8      	 armazena um 0 de referência
-14	: 0100000000001;	-- LDI $1      	 carrega o valor de incremento
-15	: 0101000000110;	-- STA @6      	 armazena o valor de incremento
-16	: 0101000001001;	-- STA @9			 armazena 1 no 9 para referência do intervalo numérico de configuração
-17	: 0100000001010;	-- LDI $10     	 carrega o valor máximo por casa possível
-18	: 0101000000111;	-- STA @7      	 armazena o valor máximo por casa possível
-19	: 0100000001001;	-- LDI $9      	 carrega o número 9 para definir o limite de contagem inicial
-20	: 0101000111010;	-- STA @58     	 armazena na casa das unidades do limite
-21	: 0101000111011;	-- STA @59     	 armazena na casa das dezenas do limite
-22	: 0101000111100;	-- STA @60     	 armazena na casa das centenas do limite
-23	: 0101000111101;	-- STA @61     	 armazena na casa dos milhares do limite
-24	: 0101000111110;	-- STA @62     	 armazena na casa das dezenas de milhar do limite
-25	: 0101000111111;	-- STA @63     	 armazena na casa das centenas de milhar do limite
-26	: 0100000000010;	-- LDI $2			 carrega 2 para inicializar próximo endereço de referência do intervalo numérico de configuração
-27	: 0101000001010;	-- STA @10			 armazena a referência de estado 2 no endereço 10
-28	: 0100000000011;	-- LDI $3			 carrega 3 para inicializar próximo endereço de referência do intervalo numérico de configuração
-29	: 0101000001011;	-- STA @11			 armazena a referência de estado 3 no endereço 11
-30	: 0100000000100;	-- LDI $4			 carrega 4 para inicializar próximo endereço de referência do intervalo numérico de configuração
-31	: 0101000001100;	-- STA @12			 armazena a referência de estado 4 no endereço 12
-32	: 0001101100100;	-- LDA @356    	 carrega o valor do botão reset
-33	: 1011000000110;	-- AND @6      	 aplica a mask
-34	: 1000000001000;	-- CEQ @8      	 verifica se é 0
-35	: 0111000100110;	-- JEQ .PULA_RESET
-36	: 0101111111101;	-- STA @509
-37	: 1001001001100;	-- JSR .RESET
-38	: 0001101100001;	-- LDA @353    	 carrega o valor do botão 1
-39	: 1011000000110;	-- AND @6      	 aplica a mask
-40	: 1000000001000;	-- CEQ @8      	 verifica se é 0
-41	: 0111000101100;	-- JEQ .PULA_CONFIG
-42	: 0101111111110;	-- STA @510
-43	: 0110000110101;	-- JMP .INICIO_LOOP_CONFIGURACAO_LIMITE
-44	: 0001101100000;	-- LDA @352    	 carrega o valor do botão 0
-45	: 1011000000110;	-- AND @6      	 aplica a mask
-46	: 1000000001000;	-- CEQ @8      	 verifica se é 0
-47	: 0111000110010;	-- JEQ .PULA_INCREMENTA_CONTAGEM
-48	: 0101111111111;	-- STA @511
-49	: 1001001010100;	-- JSR .INCREMENTA_CONTAGEM
-50	: 1001011101100;	-- JSR .APAGA_LEDS         	 apaga os LEDs
-51	: 1001010000101;	-- JSR .MOSTRA_CONTAGEM    	 escreve os números da contagem nos displays
-52	: 0110000100000;	-- JMP .LOOP_PRINCIPAL
-53	: 0100000000011;	-- LDI $3			 acende os leds da primeira posição
-54	: 0101100000000;	-- STA @256
-55	: 0001101100100;	-- LDA @356    	 carrega o valor do botão reset
-56	: 1011000000110;	-- AND @6      	 aplica a mask
-57	: 1000000000110;	-- CEQ @6      	 verifica se é 1
-58	: 0111001001001;	-- JEQ .SAIR_LOOP_CONFIGURACAO_LIMITE
-59	: 0001101100001;	-- LDA @353    	 carrega o valor do botão 1
-60	: 1011000000110;	-- AND @6      	 aplica a mask
-61	: 1000000001000;	-- CEQ @8      	 verifica se é 0
-62	: 0111001000001;	-- JEQ .PULA_MUDANCA_ESTADO
-63	: 0101111111110;	-- STA @510
-64	: 0110001001001;	-- JMP .SAIR_LOOP_CONFIGURACAO_LIMITE
-65	: 0001101100000;	-- LDA @352    	 carrega o valor do botão 0
-66	: 1011000000110;	-- AND @6      	 aplica a mask
-67	: 1000000001000;	-- CEQ @8      	 verifica se é 0
-68	: 0111001000111;	-- JEQ .PULA_MUDANCA_INTERVALO
-69	: 0101111111111;	-- STA @511
-70	: 1001011110001;	-- JSR .MUDA_INTERVALO
-71	: 1001010010010;	-- JSR .MOSTRA_LIMITE
-72	: 0110000110111;	-- JMP .LOOP_CONFIGURACAO_LIMITE
-73	: 0100000000000;	-- LDI $0    		 carrega 0
-74	: 0101000111001;	-- STA @57     	 armazena 0 no intervalo de mudança atual
-75	: 0110000100000;	-- JMP .LOOP_PRINCIPAL
-76	: 0100000000000;	-- LDI $0
-77	: 0101000000000;	-- STA @0
-78	: 0101000000001;	-- STA @1
-79	: 0101000000010;	-- STA @2
-80	: 0101000000011;	-- STA @3
-81	: 0101000000100;	-- STA @4
-82	: 0101000000101;	-- STA @5
-83	: 1010000000000;	-- RET
-84	: 0001000000000;	-- LDA @0                  	 carrega o valor da unidade
-85	: 0010000000110;	-- ADD @6                  	 incrementa o valor da unidade
-86	: 1000000000111;	-- CEQ @7                  	 compara o valor da casa com 10
-87	: 0111001011010;	-- JEQ .INCREMENTA_DEZENA  	 incrementa a casa da dezena caso necessário
-88	: 0101000000000;	-- STA @0                  	 armazena o valor da unidade
-89	: 1010000000000;	-- RET
-90	: 0100000000000;	-- LDI $0                  	 carrega 0
-91	: 0101000000000;	-- STA @0                  	 armazena 0 na unidade
-92	: 0001000000001;	-- LDA @1                  	 carrega o valor atual da dezena
-93	: 0010000000110;	-- ADD @6                  	 incrementa o valor da dezena
-94	: 1000000000111;	-- CEQ @7                  	 verifica se é igual a 10
-95	: 0111001100010;	-- JEQ .INCREMENTA_CENTENA 	 se for, incrementa a centena
-96	: 0101000000001;	-- STA @1                  	 armazena o novo valor da dezena
-97	: 0110001011001;	-- JMP .FIM_INCREMENTA     	 sai da função
-98	: 0100000000000;	-- LDI $0                  	 carrega 0
-99	: 0101000000001;	-- STA @1                  	 armazena 0 na dezena
-100	: 0001000000010;	-- LDA @2                  	 carrega o valor atual da centena
-101	: 0010000000110;	-- ADD @6                  	 incrementa o valor da centena
-102	: 1000000000111;	-- CEQ @7                  	 verifica se é igual a 10
-103	: 0111001101010;	-- JEQ .INCREMENTA_MILHAR  	 se for, incrementa o milhar
-104	: 0101000000010;	-- STA @2                  	 armazena o novo valor da centena
-105	: 0110001011001;	-- JMP .FIM_INCREMENTA     	 sai da função
-106	: 0100000000000;	-- LDI $0                  	 carrega 0
-107	: 0101000000010;	-- STA @2                  	 armazena 0 na centena
-108	: 0001000000011;	-- LDA @3                  	 carrega o valor atual do milhar
-109	: 0010000000110;	-- ADD @6                  	 incrementa o valor do milhar
-110	: 1000000000111;	-- CEQ @7                  	 verifica se é igual a 10
-111	: 0111001110010;	-- JEQ .INCREMENTA_DMILHAR 	 se for, incrementa a dezena de milhar
-112	: 0101000000011;	-- STA @3                  	 armazena o novo valor do milhar
-113	: 0110001011001;	-- JMP .FIM_INCREMENTA     	 sai da função
-114	: 0100000000000;	-- LDI $0                  	 carrega 0
-115	: 0101000000011;	-- STA @3                  	 armazena 0 no milhar
-116	: 0001000000100;	-- LDA @4                  	 carrega o valor atual da dezena de milhar
-117	: 0010000000110;	-- ADD @6                  	 incrementa o valor da dezena de milhar
-118	: 1000000000111;	-- CEQ @7                  	 verifica se é igual a 10
-119	: 0111001111010;	-- JEQ .INCREMENTA_CMILHAR 	 se for, incrementa a centena de milhar
-120	: 0101000000100;	-- STA @4                  	 armazena o novo valor da dezena de milhar
-121	: 0110001011001;	-- JMP .FIM_INCREMENTA     	 sai da função
-122	: 0100000000000;	-- LDI $0                  	 carrega 0
-123	: 0101000000100;	-- STA @4                  	 armazena 0 na dezena de milhar
-124	: 0001000000101;	-- LDA @5                  	 carrega o valor atual da centena de milhar
-125	: 0010000000110;	-- ADD @6                  	 incrementa o valor da centena de milhar
-126	: 1000000000111;	-- CEQ @7                  	 verifica se é igual a 10
-127	: 0111010000010;	-- JEQ .INCREMENTA_MILHAO  	 se for, zera tudo
-128	: 0101000000101;	-- STA @5                  	 armazena o novo valor da centena de milhar
-129	: 0110001011001;	-- JMP .FIM_INCREMENTA     	 sai da função
-130	: 0100000000000;	-- LDI $0  	 carrega 0
-131	: 0101000000101;	-- STA $5  	 armazena 0 na centena de milhar
-132	: 0110001011001;	-- JMP .FIM_INCREMENTA
-133	: 0001000000000;	-- LDA @0      	 carrega o valor da unidade
-134	: 0101100100000;	-- STA @288    	 armazena no HEX 0
-135	: 0001000000001;	-- LDA @1      	 carrega o valor da dezena
-136	: 0101100100001;	-- STA @289    	 armazena no HEX 1
-137	: 0001000000010;	-- LDA @2      	 carrega o valor da centena
-138	: 0101100100010;	-- STA @290    	 armazena no HEX 2
-139	: 0001000000011;	-- LDA @3      	 carrega o valor do milhar
-140	: 0101100100011;	-- STA @291    	 armazena no HEX 3
-141	: 0001000000100;	-- LDA @4      	 carrega o valor da dezena de milhar
-142	: 0101100100100;	-- STA @292    	 armazena no HEX 4
-143	: 0001000000101;	-- LDA @5      	 carrega o valor da centena de milhar
-144	: 0101100100101;	-- STA @293    	 armazena no HEX 5
-145	: 1010000000000;	-- RET
-146	: 0001000111001;	-- LDA @57                 	 carrega o intervalo atual
-147	: 1000000001000;	-- CEQ @8                  	 verifica se é igual a 0
-148	: 0111010011110;	-- JEQ .DIGITO_0_ML     	 se for
-149	: 1000000001001;	-- CEQ @9                  	 verifica se é igual a 1
-150	: 0111010101011;	-- JEQ .DIGITO_1_ML     	 se for
-151	: 1000000001010;	-- CEQ @10                 	 verifica se é igual a 2
-152	: 0111010111000;	-- JEQ .DIGITO_2_ML     	 se for
-153	: 1000000001011;	-- CEQ @11                 	 verifica se é igual a 3
-154	: 0111011000101;	-- JEQ .DIGITO_3_ML     	 se for
-155	: 1000000001100;	-- CEQ @12                 	 verifica se é igual a 4
-156	: 0111011010010;	-- JEQ .DIGITO_4_ML     	 se for
-157	: 0110011011111;	-- JMP .DIGITO_5_ML 		 se não for nenhum dos acima
-158	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
-159	: 0101100100000;	-- STA @288    	 armazena no HEX 0
-160	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
-161	: 0101100100001;	-- STA @289    	 armazena no HEX 1
-162	: 0001000111100;	-- LDA @60			 carrega o valor de centena do limite
-163	: 0101100100010;	-- STA @290    	 armazena no HEX 2
-164	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
-165	: 0101100100011;	-- STA @291    	 armazena no HEX 3
-166	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
-167	: 0101100100100;	-- STA @292    	 armazena no HEX 4
-168	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
-169	: 0101100100101;	-- STA @293    	 armazena no HEX 5
-170	: 1010000000000;	-- RET
-171	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
-172	: 0101100100000;	-- STA @288    	 armazena no HEX 0
-173	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
-174	: 0101100100001;	-- STA @289    	 armazena no HEX 1
-175	: 0001000111100;	-- LDA @60     	 carrega o valor da centena do limite
-176	: 0101100100010;	-- STA @290    	 armazena no HEX 2
-177	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
-178	: 0101100100011;	-- STA @291    	 armazena no HEX 3
-179	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
-180	: 0101100100100;	-- STA @292    	 armazena no HEX 4
-181	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
-182	: 0101100100101;	-- STA @293    	 armazena no HEX 5
-183	: 1010000000000;	-- RET
-184	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
-185	: 0101100100000;	-- STA @288    	 armazena no HEX 0
-186	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
-187	: 0101100100001;	-- STA @289    	 armazena no HEX 1
-188	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
-189	: 0101100100010;	-- STA @290    	 armazena no HEX 2
-190	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
-191	: 0101100100011;	-- STA @291    	 armazena no HEX 3
-192	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
-193	: 0101100100100;	-- STA @292    	 armazena no HEX 4
-194	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
-195	: 0101100100101;	-- STA @293    	 armazena no HEX 5
-196	: 1010000000000;	-- RET
-197	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
-198	: 0101100100000;	-- STA @288    	 armazena no HEX 0
-199	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
-200	: 0101100100001;	-- STA @289    	 armazena no HEX 1
-201	: 0001000111100;	-- LDA @60    		 carrega o valor da centena do limite
-202	: 0101100100010;	-- STA @290    	 armazena no HEX 2
-203	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
-204	: 0101100100011;	-- STA @291    	 armazena no HEX 3
-205	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
-206	: 0101100100100;	-- STA @292    	 armazena no HEX 4
-207	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
-208	: 0101100100101;	-- STA @293    	 armazena no HEX 5
-209	: 1010000000000;	-- RET
-210	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
-211	: 0101100100000;	-- STA @288    	 armazena no HEX 0
-212	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
-213	: 0101100100001;	-- STA @289    	 armazena no HEX 1
-214	: 0001000111100;	-- LDA @60    		 carrega o valor da centena do limite
-215	: 0101100100010;	-- STA @290    	 armazena no HEX 2
-216	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
-217	: 0101100100011;	-- STA @291    	 armazena no HEX 3
-218	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
-219	: 0101100100100;	-- STA @292    	 armazena no HEX 4
-220	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
-221	: 0101100100101;	-- STA @293    	 armazena no HEX 5
-222	: 1010000000000;	-- RET
-223	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
-224	: 0101100100000;	-- STA @288    	 armazena no HEX 0
-225	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
-226	: 0101100100001;	-- STA @289    	 armazena no HEX 1
-227	: 0001000111100;	-- LDA @60    		 carrega o valor da centena do limite
-228	: 0101100100010;	-- STA @290    	 armazena no HEX 2
-229	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
-230	: 0101100100011;	-- STA @291    	 armazena no HEX 3
-231	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
-232	: 0101100100100;	-- STA @292    	 armazena no HEX 4
-233	: 0001101000000;	-- LDA @320     	 carrega o valor das chaves
-234	: 0101100100101;	-- STA @293    	 armazena no HEX 5
-235	: 1010000000000;	-- RET
-236	: 0100000000000;	-- LDI $0
-237	: 0101100000000;	-- STA @256
-238	: 0101100000001;	-- STA @257
-239	: 0101100000010;	-- STA @258
-240	: 1010000000000;	-- RET
-241	: 0001000111001;	-- LDA @57                 	 carrega o intervalo atual
-242	: 1000000001000;	-- CEQ @8                  	 verifica se é igual a 0
-243	: 0111011111101;	-- JEQ .DIGITO_0_MI     		 se for
-244	: 1000000001001;	-- CEQ @9                  	 verifica se é igual a 1
-245	: 0111100000111;	-- JEQ .DIGITO_1_MI     		 se for
-246	: 1000000001010;	-- CEQ @10                 	 verifica se é igual a 2
-247	: 0111100010001;	-- JEQ .DIGITO_2_MI     		 se for
-248	: 1000000001011;	-- CEQ @11                 	 verifica se é igual a 3
-249	: 0111100011011;	-- JEQ .DIGITO_3_MI     		 se for
-250	: 1000000001100;	-- CEQ @12                 	 verifica se é igual a 4
-251	: 0111100100110;	-- JEQ .DIGITO_4_MI     		 se for
-252	: 0110100110000;	-- JMP .DIGITO_5_MI 			 se não for nenhum dos acima
-253	: 0100000000001;	-- LDI $1			 atualiza o intervalo
-254	: 0101000111001;	-- STA @57
-255	: 0100000000110;	-- LDI $6			 acende os LEDs da segunda posição e apaga o resto
-256	: 0101100000000;	-- STA @256
-257	: 0100000000000;	-- LDI $0
-258	: 0101100000001;	-- STA @257
-259	: 0101100000010;	-- STA @258
-260	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
-261	: 0101000111010;	-- STA @58
-262	: 1010000000000;	-- RET
-263	: 0100000000010;	-- LDI $2			 atualiza o intervalo
-264	: 0101000111001;	-- STA @57
-265	: 0100000011000;	-- LDI $24			 acende os LEDs da terceira posição e apaga o resto
-266	: 0101100000000;	-- STA @256
-267	: 0100000000000;	-- LDI $0
-268	: 0101100000001;	-- STA @257
-269	: 0101100000010;	-- STA @258
-270	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
-271	: 0101000111011;	-- STA @59
-272	: 1010000000000;	-- RET
-273	: 0100000000011;	-- LDI $3			 atualiza o intervalo
-274	: 0101000111001;	-- STA @57
-275	: 0100001100000;	-- LDI $96			 acende os LEDs da quarta posição e apaga o resto
-276	: 0101100000000;	-- STA @256
-277	: 0100000000000;	-- LDI $0
-278	: 0101100000001;	-- STA @257
-279	: 0101100000010;	-- STA @258
-280	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
-281	: 0101000111100;	-- STA @60
-282	: 1010000000000;	-- RET
-283	: 0100000000100;	-- LDI $4			 atualiza o intervalo
-284	: 0101000111001;	-- STA @57
-285	: 0100010000000;	-- LDI $128		 acende os LEDs da quinta posição e apaga o resto
-286	: 0101100000000;	-- STA @256
-287	: 0100000000001;	-- LDI $1
-288	: 0101100000001;	-- STA @257
-289	: 0100000000000;	-- LDI $0
-290	: 0101100000010;	-- STA @258
-291	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
-292	: 0101000111101;	-- STA @61
-293	: 1010000000000;	-- RET
-294	: 0100000000101;	-- LDI $5			 atualiza o intervalo
-295	: 0101000111001;	-- STA @57
-296	: 0100000000000;	-- LDI $0			 acende os LEDs da sexta posição e apaga o resto
-297	: 0101100000000;	-- STA @256
-298	: 0100000000001;	-- LDI $1
-299	: 0101100000001;	-- STA @257
-300	: 0101100000010;	-- STA @258
-301	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
-302	: 0101000111110;	-- STA @62
-303	: 1010000000000;	-- RET
-304	: 0100000000000;	-- LDI $0			 atualiza o intervalo
-305	: 0101000111001;	-- STA @57
-306	: 0100000000011;	-- LDI $3			 acende os LEDs da primeira posição e apaga o resto
-307	: 0101100000000;	-- STA @256
-308	: 0100000000000;	-- LDI $0
-309	: 0101100000001;	-- STA @257
-310	: 0101100000010;	-- STA @258
-311	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
-312	: 0101000111111;	-- STA @63
-313	: 1010000000000;	-- RET
-[314..511]	:	0000000000000;
+1	: 0101111111111;	-- STA @511    	 reseta a leitura do key 0
+2	: 0101111111110;	-- STA @510    	 reseta a leitura do key 1
+3	: 0101111111101;	-- STA @509    	 reseta a leitura do key reset
+4	: 0100000000000;	-- LDI $0      	 carrega o valor inicial das casas
+5	: 0101000111001;	-- STA @57     	 intervalo numérico de configuração
+6	: 0101000000000;	-- STA @0      	 armazena 0 na unidade
+7	: 0101000000001;	-- STA @1      	 armazena 0 na dezena
+8	: 0101000000010;	-- STA @2      	 armazena 0 na centena
+9	: 0101000000011;	-- STA @3      	 armazena 0 no milhar
+10	: 0101000000100;	-- STA @4      	 armazena 0 na dezena de milhar
+11	: 0101000000101;	-- STA @5      	 armazena 0 na centena de milhar
+12	: 0101000001000;	-- STA @8      	 armazena um 0 de referência
+13	: 0100000000001;	-- LDI $1      	 carrega o valor de incremento
+14	: 0101000000110;	-- STA @6      	 armazena o valor de incremento
+15	: 0101000001001;	-- STA @9			 armazena 1 no 9 para referência do intervalo numérico de configuração
+16	: 0100000001010;	-- LDI $10     	 carrega o valor máximo por casa possível
+17	: 0101000000111;	-- STA @7      	 armazena o valor máximo por casa possível
+18	: 0100000001001;	-- LDI $9      	 carrega o número 9 para definir o limite de contagem inicial
+19	: 0101000111010;	-- STA @58     	 armazena na casa das unidades do limite
+20	: 0101000111011;	-- STA @59     	 armazena na casa das dezenas do limite
+21	: 0101000111100;	-- STA @60     	 armazena na casa das centenas do limite
+22	: 0101000111101;	-- STA @61     	 armazena na casa dos milhares do limite
+23	: 0101000111110;	-- STA @62     	 armazena na casa das dezenas de milhar do limite
+24	: 0101000111111;	-- STA @63     	 armazena na casa das centenas de milhar do limite
+25	: 0100000000010;	-- LDI $2			 carrega 2 para inicializar próximo endereço de referência do intervalo numérico de configuração
+26	: 0101000001010;	-- STA @10			 armazena a referência de estado 2 no endereço 10
+27	: 0100000000011;	-- LDI $3			 carrega 3 para inicializar próximo endereço de referência do intervalo numérico de configuração
+28	: 0101000001011;	-- STA @11			 armazena a referência de estado 3 no endereço 11
+29	: 0100000000100;	-- LDI $4			 carrega 4 para inicializar próximo endereço de referência do intervalo numérico de configuração
+30	: 0101000001100;	-- STA @12			 armazena a referência de estado 4 no endereço 12
+31	: 0001101100100;	-- LDA @356    	 carrega o valor do botão reset
+32	: 1011000000110;	-- AND @6      	 aplica a mask
+33	: 1000000001000;	-- CEQ @8      	 verifica se é 0
+34	: 0111000100101;	-- JEQ .PULA_RESET
+35	: 0101111111101;	-- STA @509
+36	: 1001001001111;	-- JSR .RESET
+37	: 0001101100001;	-- LDA @353    	 carrega o valor do botão 1
+38	: 1011000000110;	-- AND @6      	 aplica a mask
+39	: 1000000001000;	-- CEQ @8      	 verifica se é 0
+40	: 0111000101011;	-- JEQ .PULA_CONFIG
+41	: 0101111111110;	-- STA @510
+42	: 0110000110111;	-- JMP .INICIO_LOOP_CONFIGURACAO_LIMITE
+43	: 0001101100000;	-- LDA @352    	 carrega o valor do botão 0
+44	: 1011000000110;	-- AND @6      	 aplica a mask
+45	: 1000000001000;	-- CEQ @8      	 verifica se é 0
+46	: 0111000110100;	-- JEQ .PULA_INCREMENTA_CONTAGEM
+47	: 0101111111111;	-- STA @511
+48	: 1001100111101;	-- JSR .ATINGIU_LIMITE			 verifica se a contagem atingiu o limite
+49	: 1000000000110;	-- CEQ @6						 se atingiu o limite, pula o incrementa contagem
+50	: 0111000110100;	-- JEQ .PULA_INCREMENTA_CONTAGEM
+51	: 1001001010111;	-- JSR .INCREMENTA_CONTAGEM
+52	: 1001011101111;	-- JSR .APAGA_LEDS         	 apaga os LEDs
+53	: 1001010001000;	-- JSR .MOSTRA_CONTAGEM    	 escreve os números da contagem nos displays
+54	: 0110000011111;	-- JMP .LOOP_PRINCIPAL
+55	: 0100000000011;	-- LDI $3			 acende os leds da primeira posição
+56	: 0101100000000;	-- STA @256
+57	: 1001001001111;	-- JSR .RESET		 reseta a contagem
+58	: 0001101100100;	-- LDA @356    	 carrega o valor do botão reset
+59	: 1011000000110;	-- AND @6      	 aplica a mask
+60	: 1000000000110;	-- CEQ @6      	 verifica se é 1
+61	: 0111001001100;	-- JEQ .SAIR_LOOP_CONFIGURACAO_LIMITE
+62	: 0001101100001;	-- LDA @353    	 carrega o valor do botão 1
+63	: 1011000000110;	-- AND @6      	 aplica a mask
+64	: 1000000001000;	-- CEQ @8      	 verifica se é 0
+65	: 0111001000100;	-- JEQ .PULA_MUDANCA_ESTADO
+66	: 0101111111110;	-- STA @510
+67	: 0110001001100;	-- JMP .SAIR_LOOP_CONFIGURACAO_LIMITE
+68	: 0001101100000;	-- LDA @352    	 carrega o valor do botão 0
+69	: 1011000000110;	-- AND @6      	 aplica a mask
+70	: 1000000001000;	-- CEQ @8      	 verifica se é 0
+71	: 0111001001010;	-- JEQ .PULA_MUDANCA_INTERVALO
+72	: 0101111111111;	-- STA @511
+73	: 1001011110100;	-- JSR .MUDA_INTERVALO
+74	: 1001010010101;	-- JSR .MOSTRA_LIMITE
+75	: 0110000111010;	-- JMP .LOOP_CONFIGURACAO_LIMITE
+76	: 0100000000000;	-- LDI $0    		 carrega 0
+77	: 0101000111001;	-- STA @57     	 armazena 0 no intervalo de mudança atual
+78	: 0110000011111;	-- JMP .LOOP_PRINCIPAL
+79	: 0100000000000;	-- LDI $0
+80	: 0101000000000;	-- STA @0
+81	: 0101000000001;	-- STA @1
+82	: 0101000000010;	-- STA @2
+83	: 0101000000011;	-- STA @3
+84	: 0101000000100;	-- STA @4
+85	: 0101000000101;	-- STA @5
+86	: 1010000000000;	-- RET
+87	: 0001000000000;	-- LDA @0                  	 carrega o valor da unidade
+88	: 0010000000110;	-- ADD @6                  	 incrementa o valor da unidade
+89	: 1000000000111;	-- CEQ @7                  	 compara o valor da casa com 10
+90	: 0111001011101;	-- JEQ .INCREMENTA_DEZENA  	 incrementa a casa da dezena caso necessário
+91	: 0101000000000;	-- STA @0                  	 armazena o valor da unidade
+92	: 1010000000000;	-- RET
+93	: 0100000000000;	-- LDI $0                  	 carrega 0
+94	: 0101000000000;	-- STA @0                  	 armazena 0 na unidade
+95	: 0001000000001;	-- LDA @1                  	 carrega o valor atual da dezena
+96	: 0010000000110;	-- ADD @6                  	 incrementa o valor da dezena
+97	: 1000000000111;	-- CEQ @7                  	 verifica se é igual a 10
+98	: 0111001100101;	-- JEQ .INCREMENTA_CENTENA 	 se for, incrementa a centena
+99	: 0101000000001;	-- STA @1                  	 armazena o novo valor da dezena
+100	: 0110001011100;	-- JMP .FIM_INCREMENTA     	 sai da função
+101	: 0100000000000;	-- LDI $0                  	 carrega 0
+102	: 0101000000001;	-- STA @1                  	 armazena 0 na dezena
+103	: 0001000000010;	-- LDA @2                  	 carrega o valor atual da centena
+104	: 0010000000110;	-- ADD @6                  	 incrementa o valor da centena
+105	: 1000000000111;	-- CEQ @7                  	 verifica se é igual a 10
+106	: 0111001101101;	-- JEQ .INCREMENTA_MILHAR  	 se for, incrementa o milhar
+107	: 0101000000010;	-- STA @2                  	 armazena o novo valor da centena
+108	: 0110001011100;	-- JMP .FIM_INCREMENTA     	 sai da função
+109	: 0100000000000;	-- LDI $0                  	 carrega 0
+110	: 0101000000010;	-- STA @2                  	 armazena 0 na centena
+111	: 0001000000011;	-- LDA @3                  	 carrega o valor atual do milhar
+112	: 0010000000110;	-- ADD @6                  	 incrementa o valor do milhar
+113	: 1000000000111;	-- CEQ @7                  	 verifica se é igual a 10
+114	: 0111001110101;	-- JEQ .INCREMENTA_DMILHAR 	 se for, incrementa a dezena de milhar
+115	: 0101000000011;	-- STA @3                  	 armazena o novo valor do milhar
+116	: 0110001011100;	-- JMP .FIM_INCREMENTA     	 sai da função
+117	: 0100000000000;	-- LDI $0                  	 carrega 0
+118	: 0101000000011;	-- STA @3                  	 armazena 0 no milhar
+119	: 0001000000100;	-- LDA @4                  	 carrega o valor atual da dezena de milhar
+120	: 0010000000110;	-- ADD @6                  	 incrementa o valor da dezena de milhar
+121	: 1000000000111;	-- CEQ @7                  	 verifica se é igual a 10
+122	: 0111001111101;	-- JEQ .INCREMENTA_CMILHAR 	 se for, incrementa a centena de milhar
+123	: 0101000000100;	-- STA @4                  	 armazena o novo valor da dezena de milhar
+124	: 0110001011100;	-- JMP .FIM_INCREMENTA     	 sai da função
+125	: 0100000000000;	-- LDI $0                  	 carrega 0
+126	: 0101000000100;	-- STA @4                  	 armazena 0 na dezena de milhar
+127	: 0001000000101;	-- LDA @5                  	 carrega o valor atual da centena de milhar
+128	: 0010000000110;	-- ADD @6                  	 incrementa o valor da centena de milhar
+129	: 1000000000111;	-- CEQ @7                  	 verifica se é igual a 10
+130	: 0111010000101;	-- JEQ .INCREMENTA_MILHAO  	 se for, zera tudo
+131	: 0101000000101;	-- STA @5                  	 armazena o novo valor da centena de milhar
+132	: 0110001011100;	-- JMP .FIM_INCREMENTA     	 sai da função
+133	: 0100000000000;	-- LDI $0  	 carrega 0
+134	: 0101000000101;	-- STA $5  	 armazena 0 na centena de milhar
+135	: 0110001011100;	-- JMP .FIM_INCREMENTA
+136	: 0001000000000;	-- LDA @0      	 carrega o valor da unidade
+137	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+138	: 0001000000001;	-- LDA @1      	 carrega o valor da dezena
+139	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+140	: 0001000000010;	-- LDA @2      	 carrega o valor da centena
+141	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+142	: 0001000000011;	-- LDA @3      	 carrega o valor do milhar
+143	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+144	: 0001000000100;	-- LDA @4      	 carrega o valor da dezena de milhar
+145	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+146	: 0001000000101;	-- LDA @5      	 carrega o valor da centena de milhar
+147	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+148	: 1010000000000;	-- RET
+149	: 0001000111001;	-- LDA @57                 	 carrega o intervalo atual
+150	: 1000000001000;	-- CEQ @8                  	 verifica se é igual a 0
+151	: 0111010100001;	-- JEQ .DIGITO_0_ML     	 se for
+152	: 1000000001001;	-- CEQ @9                  	 verifica se é igual a 1
+153	: 0111010101110;	-- JEQ .DIGITO_1_ML     	 se for
+154	: 1000000001010;	-- CEQ @10                 	 verifica se é igual a 2
+155	: 0111010111011;	-- JEQ .DIGITO_2_ML     	 se for
+156	: 1000000001011;	-- CEQ @11                 	 verifica se é igual a 3
+157	: 0111011001000;	-- JEQ .DIGITO_3_ML     	 se for
+158	: 1000000001100;	-- CEQ @12                 	 verifica se é igual a 4
+159	: 0111011010101;	-- JEQ .DIGITO_4_ML     	 se for
+160	: 0110011100010;	-- JMP .DIGITO_5_ML 		 se não for nenhum dos acima
+161	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
+162	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+163	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
+164	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+165	: 0001000111100;	-- LDA @60			 carrega o valor de centena do limite
+166	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+167	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
+168	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+169	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
+170	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+171	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
+172	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+173	: 1010000000000;	-- RET
+174	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
+175	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+176	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
+177	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+178	: 0001000111100;	-- LDA @60     	 carrega o valor da centena do limite
+179	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+180	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
+181	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+182	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
+183	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+184	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
+185	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+186	: 1010000000000;	-- RET
+187	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
+188	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+189	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
+190	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+191	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
+192	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+193	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
+194	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+195	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
+196	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+197	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
+198	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+199	: 1010000000000;	-- RET
+200	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
+201	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+202	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
+203	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+204	: 0001000111100;	-- LDA @60    		 carrega o valor da centena do limite
+205	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+206	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
+207	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+208	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
+209	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+210	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
+211	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+212	: 1010000000000;	-- RET
+213	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
+214	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+215	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
+216	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+217	: 0001000111100;	-- LDA @60    		 carrega o valor da centena do limite
+218	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+219	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
+220	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+221	: 0001101000000;	-- LDA @320    	 carrega o valor das chaves
+222	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+223	: 0001000111111;	-- LDA @63     	 carrega o valor da centena de milhar do limite
+224	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+225	: 1010000000000;	-- RET
+226	: 0001000111010;	-- LDA @58     	 carrega o valor da unidade do limite
+227	: 0101100100000;	-- STA @288    	 armazena no HEX 0
+228	: 0001000111011;	-- LDA @59			 carrega o valor da dezena do limite
+229	: 0101100100001;	-- STA @289    	 armazena no HEX 1
+230	: 0001000111100;	-- LDA @60    		 carrega o valor da centena do limite
+231	: 0101100100010;	-- STA @290    	 armazena no HEX 2
+232	: 0001000111101;	-- LDA @61     	 carrega o valor do milhar do limite
+233	: 0101100100011;	-- STA @291    	 armazena no HEX 3
+234	: 0001000111110;	-- LDA @62     	 carrega o valor da dezena de milhar do limite
+235	: 0101100100100;	-- STA @292    	 armazena no HEX 4
+236	: 0001101000000;	-- LDA @320     	 carrega o valor das chaves
+237	: 0101100100101;	-- STA @293    	 armazena no HEX 5
+238	: 1010000000000;	-- RET
+239	: 0100000000000;	-- LDI $0
+240	: 0101100000000;	-- STA @256
+241	: 0101100000001;	-- STA @257
+242	: 0101100000010;	-- STA @258
+243	: 1010000000000;	-- RET
+244	: 0001000111001;	-- LDA @57                 	 carrega o intervalo atual
+245	: 1000000001000;	-- CEQ @8                  	 verifica se é igual a 0
+246	: 0111100000000;	-- JEQ .DIGITO_0_MI     		 se for
+247	: 1000000001001;	-- CEQ @9                  	 verifica se é igual a 1
+248	: 0111100001010;	-- JEQ .DIGITO_1_MI     		 se for
+249	: 1000000001010;	-- CEQ @10                 	 verifica se é igual a 2
+250	: 0111100010100;	-- JEQ .DIGITO_2_MI     		 se for
+251	: 1000000001011;	-- CEQ @11                 	 verifica se é igual a 3
+252	: 0111100011110;	-- JEQ .DIGITO_3_MI     		 se for
+253	: 1000000001100;	-- CEQ @12                 	 verifica se é igual a 4
+254	: 0111100101001;	-- JEQ .DIGITO_4_MI     		 se for
+255	: 0110100110011;	-- JMP .DIGITO_5_MI 			 se não for nenhum dos acima
+256	: 0100000000001;	-- LDI $1			 atualiza o intervalo
+257	: 0101000111001;	-- STA @57
+258	: 0100000000110;	-- LDI $6			 acende os LEDs da segunda posição e apaga o resto
+259	: 0101100000000;	-- STA @256
+260	: 0100000000000;	-- LDI $0
+261	: 0101100000001;	-- STA @257
+262	: 0101100000010;	-- STA @258
+263	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
+264	: 0101000111010;	-- STA @58
+265	: 1010000000000;	-- RET
+266	: 0100000000010;	-- LDI $2			 atualiza o intervalo
+267	: 0101000111001;	-- STA @57
+268	: 0100000011000;	-- LDI $24			 acende os LEDs da terceira posição e apaga o resto
+269	: 0101100000000;	-- STA @256
+270	: 0100000000000;	-- LDI $0
+271	: 0101100000001;	-- STA @257
+272	: 0101100000010;	-- STA @258
+273	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
+274	: 0101000111011;	-- STA @59
+275	: 1010000000000;	-- RET
+276	: 0100000000011;	-- LDI $3			 atualiza o intervalo
+277	: 0101000111001;	-- STA @57
+278	: 0100001100000;	-- LDI $96			 acende os LEDs da quarta posição e apaga o resto
+279	: 0101100000000;	-- STA @256
+280	: 0100000000000;	-- LDI $0
+281	: 0101100000001;	-- STA @257
+282	: 0101100000010;	-- STA @258
+283	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
+284	: 0101000111100;	-- STA @60
+285	: 1010000000000;	-- RET
+286	: 0100000000100;	-- LDI $4			 atualiza o intervalo
+287	: 0101000111001;	-- STA @57
+288	: 0100010000000;	-- LDI $128		 acende os LEDs da quinta posição e apaga o resto
+289	: 0101100000000;	-- STA @256
+290	: 0100000000001;	-- LDI $1
+291	: 0101100000001;	-- STA @257
+292	: 0100000000000;	-- LDI $0
+293	: 0101100000010;	-- STA @258
+294	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
+295	: 0101000111101;	-- STA @61
+296	: 1010000000000;	-- RET
+297	: 0100000000101;	-- LDI $5			 atualiza o intervalo
+298	: 0101000111001;	-- STA @57
+299	: 0100000000000;	-- LDI $0			 acende os LEDs da sexta posição e apaga o resto
+300	: 0101100000000;	-- STA @256
+301	: 0100000000001;	-- LDI $1
+302	: 0101100000001;	-- STA @257
+303	: 0101100000010;	-- STA @258
+304	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
+305	: 0101000111110;	-- STA @62
+306	: 1010000000000;	-- RET
+307	: 0100000000000;	-- LDI $0			 atualiza o intervalo
+308	: 0101000111001;	-- STA @57
+309	: 0100000000011;	-- LDI $3			 acende os LEDs da primeira posição e apaga o resto
+310	: 0101100000000;	-- STA @256
+311	: 0100000000000;	-- LDI $0
+312	: 0101100000001;	-- STA @257
+313	: 0101100000010;	-- STA @258
+314	: 0001101000000;	-- LDA @320		 salva o novo valor do dígito
+315	: 0101000111111;	-- STA @63
+316	: 1010000000000;	-- RET
+317	: 0001000000101;	-- LDA @5			 carrega o valor da centena de milhar
+318	: 1000000111111;	-- CEQ @63			 compara com o valor limite da centena de milhar
+319	: 0111101000010;	-- JEQ .CMILHAR_ATINGIU
+320	: 0100000000000;	-- LDI $0			 se não for igual, não atingiu
+321	: 1010000000000;	-- RET
+322	: 0001000000100;	-- LDA @4			 carrega o valor da dezena de milhar
+323	: 1000000111110;	-- CEQ @62			 compara com o valor limite da dezena de milhar
+324	: 0111101000111;	-- JEQ .DMILHAR_ATINGIU
+325	: 0100000000000;	-- LDI $0			 se não for igual, não atingiu
+326	: 1010000000000;	-- RET
+327	: 0001000000011;	-- LDA @3			 carrega o valor do milhar
+328	: 1000000111101;	-- CEQ @61			 compara com o valor limite do milhar
+329	: 0111101001100;	-- JEQ .MILHAR_ATINGIU
+330	: 0100000000000;	-- LDI $0			 se não for igual, não atingiu
+331	: 1010000000000;	-- RET
+332	: 0001000000010;	-- LDA @2			 carrega o valor da centena
+333	: 1000000111100;	-- CEQ @60			 compara com o valor limite da centena
+334	: 0111101010001;	-- JEQ .CENTENA_ATINGIU
+335	: 0100000000000;	-- LDI $0			 se não for igual, não atingiu
+336	: 1010000000000;	-- RET
+337	: 0001000000001;	-- LDA @1			 carrega o valor da dezena
+338	: 1000000111011;	-- CEQ @59			 compara com o valor limite da dezena
+339	: 0111101010110;	-- JEQ .DEZENA_ATINGIU
+340	: 0100000000000;	-- LDI $0			 se não for igual, não atingiu
+341	: 1010000000000;	-- RET
+342	: 0001000000000;	-- LDA @0			 carrega o valor da unidade
+343	: 1000000111010;	-- CEQ @58			 compara com o valor limite da unidade
+344	: 0111101011011;	-- JEQ .UNIDADE_ATINGIU
+345	: 0100000000000;	-- LDI $0			 se não for igual, não atingiu
+346	: 1010000000000;	-- RET
+347	: 0100000000001;	-- LDI $1
+348	: 1010000000000;	-- RET
+[349..511]	:	0000000000000;
 END;

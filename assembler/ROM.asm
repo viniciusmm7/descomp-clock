@@ -1,6 +1,5 @@
 ; SETUP
 
-NOP
 STA @511    ; reseta a leitura do key 0
 STA @510    ; reseta a leitura do key 1
 STA @509    ; reseta a leitura do key reset
@@ -33,6 +32,7 @@ LDI $4		; carrega 4 para inicializar próximo endereço de referência do interv
 STA @12		; armazena a referência de estado 4 no endereço 12
 
 
+
 LOOP_PRINCIPAL:
 
     LDA @356    ; carrega o valor do botão reset
@@ -43,6 +43,7 @@ LOOP_PRINCIPAL:
     JSR .RESET
 
     PULA_RESET:
+
     LDA @353    ; carrega o valor do botão 1
     AND @6      ; aplica a mask
     CEQ @8      ; verifica se é 0
@@ -51,21 +52,29 @@ LOOP_PRINCIPAL:
     JMP .INICIO_LOOP_CONFIGURACAO_LIMITE
 
     PULA_CONFIG:
+
     LDA @352    ; carrega o valor do botão 0
     AND @6      ; aplica a mask
     CEQ @8      ; verifica se é 0
     JEQ .PULA_INCREMENTA_CONTAGEM
     STA @511
+	JSR .ATINGIU_LIMITE		; verifica se a contagem atingiu o limite
+	CEQ @6					; se atingiu o limite, pula o incrementa contagem
+	JEQ .PULA_INCREMENTA_CONTAGEM
     JSR .INCREMENTA_CONTAGEM
 
     PULA_INCREMENTA_CONTAGEM:
+	
     JSR .APAGA_LEDS         ; apaga os LEDs
     JSR .MOSTRA_CONTAGEM    ; escreve os números da contagem nos displays
     JMP .LOOP_PRINCIPAL
 
+
+
 INICIO_LOOP_CONFIGURACAO_LIMITE:
 LDI $3		; acende os leds da primeira posição
 STA @256	
+JSR .RESET	; reseta a contagem
 
 LOOP_CONFIGURACAO_LIMITE:
 
@@ -398,3 +407,52 @@ MUDA_INTERVALO:
 	LDA @320	; salva o novo valor do dígito
 	STA @63
     RET
+
+
+
+ATINGIU_LIMITE:
+
+	LDA @5		; carrega o valor da centena de milhar
+	CEQ @63		; compara com o valor limite da centena de milhar
+	JEQ .CMILHAR_ATINGIU
+	LDI $0		; se não for igual, não atingiu
+	RET
+
+	CMILHAR_ATINGIU:
+	LDA @4		; carrega o valor da dezena de milhar
+	CEQ @62		; compara com o valor limite da dezena de milhar
+	JEQ .DMILHAR_ATINGIU
+	LDI $0		; se não for igual, não atingiu
+	RET
+
+	DMILHAR_ATINGIU:
+	LDA @3		; carrega o valor do milhar
+	CEQ @61		; compara com o valor limite do milhar
+	JEQ .MILHAR_ATINGIU
+	LDI $0		; se não for igual, não atingiu
+	RET
+
+	MILHAR_ATINGIU:
+	LDA @2		; carrega o valor da centena
+	CEQ @60		; compara com o valor limite da centena
+	JEQ .CENTENA_ATINGIU
+	LDI $0		; se não for igual, não atingiu
+	RET
+
+	CENTENA_ATINGIU:
+	LDA @1		; carrega o valor da dezena
+	CEQ @59		; compara com o valor limite da dezena
+	JEQ .DEZENA_ATINGIU
+	LDI $0		; se não for igual, não atingiu
+	RET
+
+	DEZENA_ATINGIU:
+	LDA @0		; carrega o valor da unidade
+	CEQ @58		; compara com o valor limite da unidade
+	JEQ .UNIDADE_ATINGIU
+	LDI $0		; se não for igual, não atingiu
+	RET
+
+	UNIDADE_ATINGIU:
+	LDI $1
+	RET
