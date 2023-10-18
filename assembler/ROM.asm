@@ -16,6 +16,10 @@ LDI $1      ; carrega o valor de incremento
 STA @6      ; armazena o valor de incremento
 LDI $10     ; carrega o valor máximo por casa possível
 STA @7      ; armazena o valor máximo por casa possível
+LDI $224    ; carrega 224
+STA @57     ; intervalo numérico de configuração
+
+
 
 LOOP_PRINCIPAL:
 
@@ -32,6 +36,7 @@ LOOP_PRINCIPAL:
     CEQ @8      ; verifica se é 0
     JEQ .PULA_CONFIG
     STA @510
+    JSR .MUDA_INTERVALO
     JMP .LOOP_CONFIGURACAO_LIMITE
 
     PULA_CONFIG:
@@ -44,33 +49,43 @@ LOOP_PRINCIPAL:
 
     PULA_INCREMENTA_CONTAGEM:
     LDI $0                  ; define se apaga ou acende os LEDS
-    JSR .MODIFICA_LEDS      ; apaga os LEDs
+    JSR .APAGA_LEDS         ; apaga os LEDs
     JSR .MOSTRA_CONTAGEM    ; escreve os números da contagem nos displays
     JMP .LOOP_PRINCIPAL
+
+
 
 LOOP_CONFIGURACAO_LIMITE:
 
     LDA @356    ; carrega o valor do botão reset
     AND @6      ; aplica a mask
     CEQ @6      ; verifica se é 1
-    JEQ .LOOP_PRINCIPAL
+    JEQ .SAIR_LOOP_CONFIGURACAO_LIMITE
 
     LDA @353    ; carrega o valor do botão 1
     AND @6      ; aplica a mask
     CEQ @8      ; verifica se é 0
-    JEQ .PULA_MUDANCA
+    JEQ .PULA_MUDANCA_ESTADO
     STA @510
+    JMP .SAIR_LOOP_CONFIGURACAO_LIMITE
+
+    PULA_MUDANCA_ESTADO:
+    LDA @352    ; carrega o valor do botão 0
+    AND @6      ; aplica a mask
+    CEQ @8      ; verifica se é 0
+    JEQ .PULA_MUDANCA_INTERVALO
     STA @511
-    JMP .LOOP_PRINCIPAL
+    JSR .MUDA_INTERVALO
 
-    PULA_MUDANCA:
-    LDI $255
-    JSR .MODIFICA_LEDS
-
+    PULA_MUDANCA_INTERVALO:
     JMP .LOOP_CONFIGURACAO_LIMITE
 
-FIM:
-JMP .FIM
+    SAIR_LOOP_CONFIGURACAO_LIMITE:
+    LDI $224    ; carrega 224
+    STA @57     ; armazena 224 no intervalo de mudança atual
+    JMP .LOOP_PRINCIPAL
+
+
 
 RESET:
     LDI $0
@@ -81,6 +96,8 @@ RESET:
     STA @4
     STA @5
     RET
+
+
 
 INCREMENTA_CONTAGEM:
     LDA @0                  ; carrega o valor da unidade
@@ -146,6 +163,8 @@ INCREMENTA_CONTAGEM:
         STA $5  ; armazena 0 na centena de milhar
         JMP .FIM_INCREMENTA
 
+
+
 MOSTRA_CONTAGEM:
     LDA @0      ; carrega o valor da unidade
     STA @288    ; armazena o 0 no HEX 0
@@ -163,8 +182,36 @@ MOSTRA_CONTAGEM:
 
 
 
-MODIFICA_LEDS:
+APAGA_LEDS:
+    LDI $0
     STA @256
     STA @257
     STA @258
+    RET
+
+
+
+MUDA_INTERVALO:
+
+    LDA @57                 ; carrega o intervalo atual
+    CEQ @8                  ; verifica se é igual a 0
+    JEQ .INTERVALO_ZERO     ; se for
+    JMP .INTERVALO_NAO_ZERO ; se não for
+
+    INTERVALO_ZERO:         ; acende os LEDs da esquerda
+    LDI $224
+    STA @57
+    STA @256
+    LDI $1
+    STA @257
+    STA @258
+    RET
+
+    INTERVALO_NAO_ZERO:     ; acende os LEDs da direita
+    LDI $0
+    STA @57
+    STA @257
+    STA @258
+    LDI $31
+    STA @256
     RET
