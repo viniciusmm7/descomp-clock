@@ -66,7 +66,7 @@ def is_solo_instruction_in(line: str):
 def translate_to_binary(line: str, labels: dict = None):
     if is_solo_instruction_in(line):
         mnemonic_hex_join_instru = add_mnemonic_hex_to_instruction(line)
-        asm_instruction = get_asm_instruction(mnemonic_hex_join_instru)
+        asm_instruction = bin(get_asm_instruction(mnemonic_hex_join_instru))[2:]
         return asm_instruction.ljust(13, '0')
 
     mnemonic_hex_join_instru = add_mnemonic_hex_to_instruction(line)
