@@ -53,28 +53,31 @@ LOOP_PRINCIPAL:
 
     PULA_CONFIG:
 
+	JSR .ATINGIU_LIMITE		; verifica se a contagem atingiu o limite
+	CEQ @6					; se atingiu o limite, pula o incrementa contagem
+	JEQ .PULA_INCREMENTA_CONTAGEM
+
     LDA @352    ; carrega o valor do botão 0
     AND @6      ; aplica a mask
     CEQ @8      ; verifica se é 0
     JEQ .PULA_INCREMENTA_CONTAGEM
     STA @511
-	JSR .ATINGIU_LIMITE		; verifica se a contagem atingiu o limite
-	CEQ @6					; se atingiu o limite, pula o incrementa contagem
-	JEQ .PULA_INCREMENTA_CONTAGEM
     JSR .INCREMENTA_CONTAGEM
 
     PULA_INCREMENTA_CONTAGEM:
-	
-    JSR .APAGA_LEDS         ; apaga os LEDs
+
     JSR .MOSTRA_CONTAGEM    ; escreve os números da contagem nos displays
     JMP .LOOP_PRINCIPAL
 
 
 
 INICIO_LOOP_CONFIGURACAO_LIMITE:
+JSR .RESET	; reseta a contagem
 LDI $3		; acende os leds da primeira posição
 STA @256	
-JSR .RESET	; reseta a contagem
+LDI $0
+STA @257
+STA @258
 
 LOOP_CONFIGURACAO_LIMITE:
 
@@ -103,6 +106,7 @@ LOOP_CONFIGURACAO_LIMITE:
     JMP .LOOP_CONFIGURACAO_LIMITE
 
     SAIR_LOOP_CONFIGURACAO_LIMITE:
+	JSR .APAGA_LEDS         ; apaga os LEDs
     LDI $0    	; carrega 0
     STA @57     ; armazena 0 no intervalo de mudança atual
     JMP .LOOP_PRINCIPAL
@@ -117,6 +121,13 @@ RESET:
     STA @3
     STA @4
     STA @5
+	LDI $0
+	STA @256
+	STA @257
+	STA @258
+	STA @511
+	STA @510
+	STA @509
     RET
 
 
@@ -454,5 +465,9 @@ ATINGIU_LIMITE:
 	RET
 
 	UNIDADE_ATINGIU:
+	LDI $255
+	STA @256
+	STA @257
+	STA @258
 	LDI $1
 	RET
