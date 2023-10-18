@@ -7,7 +7,7 @@ entity top_level is
 		larguraDados            : natural := 8;
 		larguraEnderecos        : natural := 9;
 		larguraInstrucoes       : natural := 13;
-		simulacao               : boolean := FALSE -- para gravar na placa, altere de TRUE para FALSE
+		simulacao               : boolean := TRUE -- para gravar na placa, altere de TRUE para FALSE
 	);
 	port (
 		CLOCK_50      : in  STD_LOGIC;
@@ -77,7 +77,7 @@ begin
 
 	-- Para simular, fica mais simples tirar o edgeDetector
 	gravar:  if simulacao generate
-		CLK <= CLOCK;
+		CLK <= CLOCK_50;
 	else generate
 		detectorSub0: work.edgeDetector(bordaSubida)
 			port map (clk => CLOCK_50, entrada => (not KEY(3)), saida => CLK);
