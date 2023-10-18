@@ -18,6 +18,13 @@ LDI $10     ; carrega o valor máximo por casa possível
 STA @7      ; armazena o valor máximo por casa possível
 
 LOOP:
+    LDA @356    ; carrega o valor do botão reset
+    AND @6      ; aplica a mask
+    CEQ @8      ; verifica se é 0
+    JEQ .PULA_RESET
+    STA @509
+    JSR .RESET
+    PULA_RESET:
     LDA @352    ; carrega o valor do botão 0
     AND @6      ; aplica a mask
     CEQ @8      ; verifica se é 0
@@ -30,6 +37,16 @@ LOOP:
 
 FIM:
 JMP .FIM
+
+RESET:
+    LDI $0
+    STA @0
+    STA @1
+    STA @2
+    STA @3
+    STA @4
+    STA @5
+    RET
 
 INCREMENTA_CONTAGEM:
     LDA @0                  ; carrega o valor da unidade
