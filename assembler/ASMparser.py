@@ -1,6 +1,6 @@
 from mnemonics import mnemonics
 
-SOLO_INSTRUCTIONS = ['NOP', 'RET', 'AND']
+SOLO_INSTRUCTIONS = ['NOP', 'RET']
 
 def get_label_address(label: str, labels: dict):
     return labels[label]
