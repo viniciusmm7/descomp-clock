@@ -27,6 +27,9 @@ def convert_to_VHDL():
             if ':' in line:
                 label_counter += 1
                 continue
+            
+            if line.startswith(';'):
+                line = 'NOP ' + line
 
             instruction_binary = translate_to_binary(line, labels)
 
