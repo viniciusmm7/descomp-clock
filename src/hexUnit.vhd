@@ -16,7 +16,7 @@ architecture comportamento of hexUnit is
   
   begin
 
-  DECODER: entity work.conversorHex7Seg port map (
+  DECODER: entity work.conversorDec7Seg port map (
     dadoHex     => reg_out,
     saida7seg   => OUTPUT
   );
