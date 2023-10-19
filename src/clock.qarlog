@@ -1,0 +1,40 @@
+Quartus Prime Archive log --	/home/jeronimo/descomp/projeto1/src/clock.qarlog
+
+Archive:	/home/jeronimo/descomp/projeto1/src/clock.qar
+Date:		Wed Oct 18 22:46:01 2023
+Quartus Prime		20.1.0 Build 711 06/05/2020 SJ Lite Edition
+
+	=========== Files Selected: ===========
+/home/jeronimo/descomp/projeto1/src/BinaryDigit.vhd
+/home/jeronimo/descomp/projeto1/src/FlipFlopD.vhd
+/home/jeronimo/descomp/projeto1/src/Mux2Way.vhd
+/home/jeronimo/descomp/projeto1/src/Mux4Way9.vhd
+/home/jeronimo/descomp/projeto1/src/ULA.vhd
+/home/jeronimo/descomp/projeto1/src/Waveform.vwf
+/home/jeronimo/descomp/projeto1/src/bufferTriState.vhd
+/home/jeronimo/descomp/projeto1/src/bufferTriState8.vhd
+/home/jeronimo/descomp/projeto1/src/clock.qpf
+/home/jeronimo/descomp/projeto1/src/clock.qsf
+/home/jeronimo/descomp/projeto1/src/constants.vhd
+/home/jeronimo/descomp/projeto1/src/conversorDec7Seg.vhd
+/home/jeronimo/descomp/projeto1/src/decoder3x8.vhd
+/home/jeronimo/descomp/projeto1/src/decoderEnderecos.vhd
+/home/jeronimo/descomp/projeto1/src/decoderInstrucoes.vhd
+/home/jeronimo/descomp/projeto1/src/edgeDetector.vhd
+/home/jeronimo/descomp/projeto1/src/hexUnit.vhd
+/home/jeronimo/descomp/projeto1/src/initROM.mif
+/home/jeronimo/descomp/projeto1/src/keyUnit.vhd
+/home/jeronimo/descomp/projeto1/src/logicaDesvio.vhd
+/home/jeronimo/descomp/projeto1/src/memoriaRAM.vhd
+/home/jeronimo/descomp/projeto1/src/memoriaROM.vhd
+/home/jeronimo/descomp/projeto1/src/muxGenerico2x1.vhd
+/home/jeronimo/descomp/projeto1/src/processador.vhd
+/home/jeronimo/descomp/projeto1/src/registradorBit.vhd
+/home/jeronimo/descomp/projeto1/src/registradorGenerico.vhd
+/home/jeronimo/descomp/projeto1/src/somaConstante.vhd
+/home/jeronimo/descomp/projeto1/src/top_level.vhd
+/home/jeronimo/intelFPGA_lite/20.1/quartus/linux64/assignment_defaults.qdf
+	======= Total: 29 files to archive =======
+
+	================ Status: ===============
+All files archived successfully.
