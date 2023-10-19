@@ -1,0 +1,11 @@
+0 - 5   : contagem atual em BCD (0 é a unidade, 5 é a centena de milhar)
+6       : constante 1
+7       : constante 10
+8       : constante 0
+9       : constatne 1
+10      : constante 2
+11      : constante 3
+12      : constante 4
+51 - 56 : valor a ser mostrado nos displays no modo de configuração do limite em BCD (51 é a unidade, 56 é a centena de milhar)
+57      : indicador do dígito sendo editado na configuração de limite
+58 - 63 : limite do contador em BCD (58 é a unidade, 63 é a centena de milhar)

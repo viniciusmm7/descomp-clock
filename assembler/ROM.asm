@@ -18,6 +18,12 @@ STA @9		; armazena 1 no 9 para referência do intervalo numérico de configuraç
 LDI $10     ; carrega o valor máximo por casa possível
 STA @7      ; armazena o valor máximo por casa possível
 LDI $9      ; carrega o número 9 para definir o limite de contagem inicial
+STA @51		; armazena na casa das unidades do limite temporário
+STA @52		; armazena na casa das dezenas do limite temporário
+STA @53		; armazena na casa das centenas do limite temporário
+STA @54		; armazena na casa dos milhares do limite temporário
+STA @55		; armazena na casa das dezenas de milhares do limite temporário
+STA @56		; armazena na casa das centenas de milhares do limite temporário
 STA @58     ; armazena na casa das unidades do limite
 STA @59     ; armazena na casa das dezenas do limite
 STA @60     ; armazena na casa das centenas do limite
@@ -84,7 +90,7 @@ LOOP_CONFIGURACAO_LIMITE:
     LDA @356    ; carrega o valor do botão reset
     AND @6      ; aplica a mask
     CEQ @6      ; verifica se é 1
-    JEQ .SAIR_LOOP_CONFIGURACAO_LIMITE
+    JEQ .SAIR_LOOP_CONFIGURACAO_LIMITE_SEM_SALVAR
 
     LDA @353    ; carrega o valor do botão 1
     AND @6      ; aplica a mask
@@ -106,9 +112,10 @@ LOOP_CONFIGURACAO_LIMITE:
     JMP .LOOP_CONFIGURACAO_LIMITE
 
     SAIR_LOOP_CONFIGURACAO_LIMITE:
-
-	JSR .APAGA_LEDS         ; apaga os LEDs
 	JSR .ARMAZENA_LIMITE	; armazena o limite do jeito que mostra nos displays
+
+	SAIR_LOOP_CONFIGURACAO_LIMITE_SEM_SALVAR:
+	JSR .APAGA_LEDS
 
     LDI $0    	; carrega 0
     STA @57     ; armazena 0 no intervalo de mudança atual
@@ -131,6 +138,18 @@ RESET:
 	STA @511
 	STA @510
 	STA @509
+	LDA @58
+	STA @51
+	LDA @59
+	STA @52
+	LDA @60
+	STA @53
+	LDA @61
+	STA @54
+	LDA @62
+	STA @55
+	LDA @63
+	STA @56
     RET
 
 
@@ -236,90 +255,90 @@ MOSTRA_LIMITE:
 	DIGITO_0_ML:
 		LDA @320    ; carrega o valor das chaves
 		STA @288    ; armazena no HEX 0
-		LDA @59		; carrega o valor da dezena do limite
+		LDA @52		; carrega o valor da dezena do limite temporário
 		STA @289    ; armazena no HEX 1
-		LDA @60		; carrega o valor de centena do limite
+		LDA @53		; carrega o valor de centena do limite temporário
 		STA @290    ; armazena no HEX 2
-		LDA @61     ; carrega o valor do milhar do limite
+		LDA @54     ; carrega o valor do milhar do limite temporário
 		STA @291    ; armazena no HEX 3
-		LDA @62     ; carrega o valor da dezena de milhar do limite
+		LDA @55     ; carrega o valor da dezena de milhar do limite temporário
 		STA @292    ; armazena no HEX 4
-		LDA @63     ; carrega o valor da centena de milhar do limite
+		LDA @56     ; carrega o valor da centena de milhar do limite temporário
 		STA @293    ; armazena no HEX 5
 		RET
 
 	DIGITO_1_ML:
-		LDA @58     ; carrega o valor da unidade do limite
+		LDA @51     ; carrega o valor da unidade do limite temporário
 		STA @288    ; armazena no HEX 0
 		LDA @320    ; carrega o valor das chaves
 		STA @289    ; armazena no HEX 1
-		LDA @60     ; carrega o valor da centena do limite
+		LDA @53     ; carrega o valor da centena do limite temporário
 		STA @290    ; armazena no HEX 2
-		LDA @61     ; carrega o valor do milhar do limite
+		LDA @54     ; carrega o valor do milhar do limite temporário
 		STA @291    ; armazena no HEX 3
-		LDA @62     ; carrega o valor da dezena de milhar do limite
+		LDA @55     ; carrega o valor da dezena de milhar do limite temporário
 		STA @292    ; armazena no HEX 4
-		LDA @63     ; carrega o valor da centena de milhar do limite
+		LDA @56     ; carrega o valor da centena de milhar do limite temporário
 		STA @293    ; armazena no HEX 5
 		RET
 
 	DIGITO_2_ML:
-		LDA @58     ; carrega o valor da unidade do limite
+		LDA @51     ; carrega o valor da unidade do limite temporário
 		STA @288    ; armazena no HEX 0
-		LDA @59		; carrega o valor da dezena do limite
+		LDA @52		; carrega o valor da dezena do limite temporário
 		STA @289    ; armazena no HEX 1
 		LDA @320    ; carrega o valor das chaves
 		STA @290    ; armazena no HEX 2
-		LDA @61     ; carrega o valor do milhar do limite
+		LDA @54     ; carrega o valor do milhar do limite temporário
 		STA @291    ; armazena no HEX 3
-		LDA @62     ; carrega o valor da dezena de milhar do limite
+		LDA @55     ; carrega o valor da dezena de milhar do limite temporário
 		STA @292    ; armazena no HEX 4
-		LDA @63     ; carrega o valor da centena de milhar do limite
+		LDA @56     ; carrega o valor da centena de milhar do limite temporário
 		STA @293    ; armazena no HEX 5
 		RET
 
 	DIGITO_3_ML:
-		LDA @58     ; carrega o valor da unidade do limite
+		LDA @51     ; carrega o valor da unidade do limite temporário
 		STA @288    ; armazena no HEX 0
-		LDA @59		; carrega o valor da dezena do limite
+		LDA @52		; carrega o valor da dezena do limite temporário
 		STA @289    ; armazena no HEX 1
-		LDA @60    	; carrega o valor da centena do limite
+		LDA @53    	; carrega o valor da centena do limite temporário
 		STA @290    ; armazena no HEX 2
 		LDA @320    ; carrega o valor das chaves
 		STA @291    ; armazena no HEX 3
-		LDA @62     ; carrega o valor da dezena de milhar do limite
+		LDA @55     ; carrega o valor da dezena de milhar do limite temporário
 		STA @292    ; armazena no HEX 4
-		LDA @63     ; carrega o valor da centena de milhar do limite
+		LDA @56     ; carrega o valor da centena de milhar do limite temporário
 		STA @293    ; armazena no HEX 5
 		RET
 
 	DIGITO_4_ML:
-		LDA @58     ; carrega o valor da unidade do limite
+		LDA @51     ; carrega o valor da unidade do limite temporário
 		STA @288    ; armazena no HEX 0
-		LDA @59		; carrega o valor da dezena do limite
+		LDA @52		; carrega o valor da dezena do limite temporário
 		STA @289    ; armazena no HEX 1
-		LDA @60    	; carrega o valor da centena do limite
+		LDA @53    	; carrega o valor da centena do limite temporário
 		STA @290    ; armazena no HEX 2
-		LDA @61     ; carrega o valor do milhar do limite
+		LDA @54     ; carrega o valor do milhar do limite temporário
 		STA @291    ; armazena no HEX 3
 		LDA @320    ; carrega o valor das chaves
 		STA @292    ; armazena no HEX 4
-		LDA @63     ; carrega o valor da centena de milhar do limite
+		LDA @56     ; carrega o valor da centena de milhar do limite temporário
 		STA @293    ; armazena no HEX 5
 		RET
 
 	DIGITO_5_ML:
-		LDA @58     ; carrega o valor da unidade do limite
+		LDA @51     ; carrega o valor da unidade do limite temporário
 		STA @288    ; armazena no HEX 0
-		LDA @59		; carrega o valor da dezena do limite
+		LDA @52		; carrega o valor da dezena do limite temporário
 		STA @289    ; armazena no HEX 1
-		LDA @60    	; carrega o valor da centena do limite
+		LDA @53    	; carrega o valor da centena do limite temporário
 		STA @290    ; armazena no HEX 2
-		LDA @61     ; carrega o valor do milhar do limite
+		LDA @54     ; carrega o valor do milhar do limite temporário
 		STA @291    ; armazena no HEX 3
-		LDA @62     ; carrega o valor da dezena de milhar do limite
+		LDA @55     ; carrega o valor da dezena de milhar do limite temporário
 		STA @292    ; armazena no HEX 4
-		LDA @320     ; carrega o valor das chaves
+		LDA @320    ; carrega o valor das chaves
 		STA @293    ; armazena no HEX 5
 		RET
 
@@ -358,7 +377,7 @@ MUDA_INTERVALO:
     STA @257
     STA @258
 	LDA @320	; salva o novo valor do dígito
-	STA @58
+	STA @51
     RET
 
     DIGITO_1_MI:
@@ -370,7 +389,7 @@ MUDA_INTERVALO:
     STA @257
     STA @258
 	LDA @320	; salva o novo valor do dígito
-	STA @59
+	STA @52
     RET
 
 	DIGITO_2_MI:
@@ -382,7 +401,7 @@ MUDA_INTERVALO:
     STA @257
     STA @258
 	LDA @320	; salva o novo valor do dígito
-	STA @60
+	STA @53
     RET
 
 	DIGITO_3_MI:
@@ -395,7 +414,7 @@ MUDA_INTERVALO:
 	LDI $0
     STA @258
 	LDA @320	; salva o novo valor do dígito
-	STA @61
+	STA @54
     RET
 
 	DIGITO_4_MI:
@@ -407,7 +426,7 @@ MUDA_INTERVALO:
     STA @257
     STA @258
 	LDA @320	; salva o novo valor do dígito
-	STA @62
+	STA @55
     RET
 
 	DIGITO_5_MI:
@@ -419,7 +438,7 @@ MUDA_INTERVALO:
     STA @257
     STA @258
 	LDA @320	; salva o novo valor do dígito
-	STA @63
+	STA @56
     RET
 
 
@@ -493,30 +512,44 @@ ARMAZENA_LIMITE:
 
     DIGITO_0_AL:
     LDA @320	; carrega o valor dos switches
-	STA @58		; armazena na unidade do limite
-    RET
+	STA @51		; armazena na unidade do limite
+    JMP .FINAL_AL
 
     DIGITO_1_AL:
     LDA @320	; carrega o valor dos switches
-	STA @59		; armazena na dezena do limite
-    RET
+	STA @52		; armazena na dezena do limite
+    JMP .FINAL_AL
 
 	DIGITO_2_AL:
     LDA @320	; carrega o valor dos switches
-	STA @60		; armazena na centena do limite
-    RET
+	STA @53		; armazena na centena do limite
+    JMP .FINAL_AL
 
 	DIGITO_3_AL:
     LDA @320	; carrega o valor dos switches
-	STA @61		; armazena no milhar do limite
-    RET
+	STA @54		; armazena no milhar do limite
+    JMP .FINAL_AL
 
 	DIGITO_4_AL:
     LDA @320	; carrega o valor dos switches
-	STA @62		; armazena na dezena de milhar do limite
-    RET
+	STA @55		; armazena na dezena de milhar do limite
+    JMP .FINAL_AL
 
 	DIGITO_5_AL:
     LDA @320	; carrega o valor dos switches
-	STA @63		; armazena na centena de milhar do limite
+	STA @56		; armazena na centena de milhar do limite
+	
+	FINAL_AL:
+	LDA @51
+	STA @58
+	LDA @52
+	STA @59
+	LDA @53
+	STA @60
+	LDA @54
+	STA @61
+	LDA @55
+	STA @62
+	LDA @56
+	STA @63
     RET
