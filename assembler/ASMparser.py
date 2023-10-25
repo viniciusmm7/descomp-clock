@@ -2,11 +2,14 @@ from mnemonics import mnemonics
 
 SOLO_INSTRUCTIONS = ['NOP', 'RET']
 
+
 def get_label_address(label: str, labels: dict):
     return labels[label]
 
+
 def get_asm_label(line: str):
     return line.split(':', 1)[0].strip()
+
 
 def find_labels(lines: list):
     labels = dict()
@@ -26,8 +29,10 @@ def find_labels(lines: list):
 
     return labels
 
+
 def get_asm_instruction(line: str):
     return line.split(';', 1)[0].strip()
+
 
 def get_asm_comment(line: str):
     if ';' in line:
@@ -36,14 +41,19 @@ def get_asm_comment(line: str):
 
     return line
 
+
 def add_mnemonic_hex_to_instruction(line: str):
     line = line.strip().split(' ')
+    line[0] = line[0].upper()
+    mnemonic = line[0]
+    register = '00' # r0 only test
+    immediate = line[1]
 
-    if line[0] in mnemonics:
-        line[0] = str(mnemonics[line[0]])
-    
-    result = ''.join(line)
-    return result
+    if mnemonic in mnemonics:
+        mnemonic = str(mnemonics[mnemonic])
+
+    return f'{mnemonic}{register}{immediate}'
+
 
 def convert_9_bits_char(line: str, char: str, labels: dict = None):
     line = line.split(char)
@@ -60,14 +70,16 @@ def convert_9_bits_char(line: str, char: str, labels: dict = None):
     result = ''.join(line)
     return result
 
+
 def is_solo_instruction_in(line: str):
     return any(solo_instruction in line for solo_instruction in SOLO_INSTRUCTIONS)
+
 
 def translate_to_binary(line: str, labels: dict = None):
     if is_solo_instruction_in(line):
         mnemonic_hex_join_instru = add_mnemonic_hex_to_instruction(line)
         asm_instruction = bin(int(get_asm_instruction(mnemonic_hex_join_instru)))[2:]
-        return asm_instruction.ljust(13, '0')
+        return asm_instruction.ljust(15, '0')
 
     mnemonic_hex_join_instru = add_mnemonic_hex_to_instruction(line)
     asm_instruction = get_asm_instruction(mnemonic_hex_join_instru)
@@ -80,10 +92,10 @@ def translate_to_binary(line: str, labels: dict = None):
 
     elif '.' in asm_instruction:
         return convert_9_bits_char(asm_instruction, '.', labels)
-    
+
 
 def format_bin_line(line: str):
-    translation_dict = str.maketrans({ 't': '', 'm': '', 'p': '', '(': '', ')': '', '=': '', 'x': '', '"': '' })
+    translation_dict = str.maketrans({'t': '', 'm': '', 'p': '', '(': '', ')': '', '=': '', 'x': '', '"': ''})
 
     line = line.split('--', 1)
     line[0] = line[0].translate(translation_dict)
