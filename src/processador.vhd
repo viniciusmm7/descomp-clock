@@ -30,9 +30,9 @@ architecture arquitetura of processador is
   signal endMUX_PC    : STD_LOGIC_VECTOR((larguraEnderecos - 1) downto 0);
   signal reg_ret_out  : STD_LOGIC_VECTOR((larguraEnderecos - 1) downto 0);
 
-  signal acu_out    : STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
+  signal regs_out    : STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
   signal MUX_ULA    : STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
-  signal ULA_acu    : STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
+  signal ULA_regs    : STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
   signal imediato   : STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
 
   signal controle             : STD_LOGIC_VECTOR(11 downto 0);
@@ -41,7 +41,7 @@ architecture arquitetura of processador is
   signal sel_next_instruction : STD_LOGIC_VECTOR(1 downto 0);
 
   signal habilita_escrita_ret : STD_LOGIC;
-  signal habilita_acumulador  : STD_LOGIC;
+  signal hab_regs  : STD_LOGIC;
   signal seletor_MUX_dados    : STD_LOGIC;
   signal habilita_flag        : STD_LOGIC;
   signal current_zero         : STD_LOGIC;
@@ -56,21 +56,24 @@ begin
 -- Instanciando os componentes:
 
 ULA: entity work.ULA port map (
-  entrada_A => acu_out,
+  entrada_A => regs_out,
   entrada_B => MUX_ULA,
-  saida     => ULA_acu,
+  saida     => ULA_regs,
   seletor   => operacao,
   zero      => current_zero
 );
 
-ACUMULADOR: entity work.registradorGenerico
-generic map (larguraDados => larguraDados)
+BANCO_REGS: entity work.bancoRegistradoresArqRegMem
+generic map (
+	larguraDados			=> larguraDados,
+	larguraEndBancoRegs	=> 2
+)
 port map (
-  entrada   => ULA_acu,
-  habilita  => habilita_acumulador,
-  clock     => CLK,
-  reset     => '0',
-  saida     => acu_out
+  clk					=> CLK,
+  endereco			=> INSTRUCTION(10 downto 9),
+  dadoEscrita		=> ULA_regs,
+  habilitaEscrita	=> hab_regs,
+  saida				=> regs_out
 );
 
 MUX_DADOS: entity work.muxGenerico2x1
@@ -148,15 +151,15 @@ ret                   <= controle(9);
 jsr                   <= controle(8);
 jeq                   <= controle(7);
 seletor_MUX_dados     <= controle(6);
-habilita_acumulador   <= controle(5);
+hab_regs   <= controle(5);
 operacao              <= controle(4 downto 3);
 habilita_flag         <= controle(2);
-imediato              <= INSTRUCTION(7 downto 0);
-opcode                <= INSTRUCTION(12 downto 9);
+opcode                <= INSTRUCTION(14 downto 11);
 endereco              <= INSTRUCTION(8 downto 0);
+imediato              <= INSTRUCTION(7 downto 0);
 
 DATA_ADDR   <= endereco;
-DATA_OUT    <= acu_out;
+DATA_OUT    <= regs_out;
 ROM_ADDR    <= PC_count;
 RD          <= controle(1);
 WR          <= controle(0);

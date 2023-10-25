@@ -4,6 +4,7 @@ use ieee.numeric_std.all;
 
 package constants is
 
+	-- Mnemonics
 	constant NOP  : STD_LOGIC_VECTOR(3 downto 0) := "0000";
 	constant LDA  : STD_LOGIC_VECTOR(3 downto 0) := "0001";
 	constant ADD  : STD_LOGIC_VECTOR(3 downto 0) := "0010";
@@ -16,5 +17,10 @@ package constants is
 	constant JSR  : STD_LOGIC_VECTOR(3 downto 0) := "1001";
 	constant RET  : STD_LOGIC_VECTOR(3 downto 0) := "1010";
 	constant ANDR : STD_LOGIC_VECTOR(3 downto 0) := "1011";
+	
+	-- Widths
+	constant LARGURA_DADOS			: natural := 8;
+	constant LARGURA_ENDERECOS		: natural := 9;
+	constant LARGURA_INSTRUCOES	: natural := 15;
 
 end package;

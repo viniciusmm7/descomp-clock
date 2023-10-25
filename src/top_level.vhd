@@ -1,34 +1,35 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.constants.all;
 
 entity top_level is
 	-- Total de bits das entradas e saidas
 	generic (
-		larguraDados            : natural := 8;
-		larguraEnderecos        : natural := 9;
-		larguraInstrucoes       : natural := 13;
+		larguraDados            : natural := LARGURA_DADOS;
+		larguraEnderecos        : natural := LARGURA_ENDERECOS;
+		larguraInstrucoes       : natural := LARGURA_INSTRUCOES;
 		simulacao               : boolean := TRUE -- para gravar na placa, altere de TRUE para FALSE
 	);
 	port (
-		CLOCK_50      : in  STD_LOGIC;
-		CLOCK         : in  STD_LOGIC;
+		CLOCK_50 		: in  STD_LOGIC;
+		CLOCK				: in  STD_LOGIC;
 
-		PCOUT         : out STD_LOGIC_VECTOR((larguraEnderecos - 1) downto 0);
-		DIN           : out STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
-		DOUT          : out STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
-		ADDR		  : out STD_LOGIC_VECTOR((larguraEnderecos - 1) downto 0);
+		PCOUT				: out STD_LOGIC_VECTOR((larguraEnderecos - 1) downto 0);
+		DIN				: out STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
+		DOUT				: out STD_LOGIC_VECTOR((larguraDados - 1) downto 0);
+		ADDR				: out STD_LOGIC_VECTOR((larguraEnderecos - 1) downto 0);
 
-		SW            : in STD_LOGIC_VECTOR(9 downto 0);
-		KEY           : in STD_LOGIC_VECTOR(3 downto 0);
-		FPGA_RESET_N  : in STD_LOGIC;
+		SW					: in STD_LOGIC_VECTOR(9 downto 0);
+		KEY				: in STD_LOGIC_VECTOR(3 downto 0);
+		FPGA_RESET_N	: in STD_LOGIC;
 
-		LEDR          : out STD_LOGIC_VECTOR(9 downto 0);
-		HEX0          : out STD_LOGIC_VECTOR(6 downto 0);
-		HEX1          : out STD_LOGIC_VECTOR(6 downto 0);
-		HEX2          : out STD_LOGIC_VECTOR(6 downto 0);
-		HEX3          : out STD_LOGIC_VECTOR(6 downto 0);
-		HEX4          : out STD_LOGIC_VECTOR(6 downto 0);
-		HEX5          : out STD_LOGIC_VECTOR(6 downto 0)
+		LEDR				: out STD_LOGIC_VECTOR(9 downto 0);
+		HEX0				: out STD_LOGIC_VECTOR(6 downto 0);
+		HEX1				: out STD_LOGIC_VECTOR(6 downto 0);
+		HEX2				: out STD_LOGIC_VECTOR(6 downto 0);
+		HEX3				: out STD_LOGIC_VECTOR(6 downto 0);
+		HEX4				: out STD_LOGIC_VECTOR(6 downto 0);
+		HEX5				: out STD_LOGIC_VECTOR(6 downto 0)
 	);
 end entity;
 
