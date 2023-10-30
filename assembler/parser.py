@@ -162,7 +162,6 @@ class Parser:
             instruction, comment = self.__split_line(line)
             instruction = self.__parse_instruction(instruction)
             mif_line = f'{self.adjusted_line_counter}:\t{instruction};\t{comment}\n'
-            print(mif_line, end='')
 
             return mif_line
 
