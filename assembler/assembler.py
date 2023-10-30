@@ -15,7 +15,8 @@ def build_mif(asm_file, mif_file):
             mif_lines = parser.parse()
 
             mif.writelines(mif_lines)
-            mif.write('\n' + MIF_FOOTER)
+            mif.write(f'[{parser.adjusted_line_counter + 1}..{511}]: 000000000000000;\n')
+            mif.write(MIF_FOOTER)
 
 
 if __name__ == '__main__':
