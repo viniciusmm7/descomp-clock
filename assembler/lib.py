@@ -1,6 +1,6 @@
 from enum import Enum, IntEnum
 
-TEST = True
+TEST = False
 
 PROJECT_PATH = '../src/'
 
