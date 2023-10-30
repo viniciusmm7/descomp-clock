@@ -4,15 +4,15 @@ TEST = True
 
 PROJECT_PATH = '../src/'
 
-MIF_HEADER = '''DEPTH = 512;
-WIDTH = 15;
+MIF_HEADER = '''WIDTH = 15;
+DEPTH = 512;
 ADDRESS_RADIX = HEX;
 DATA_RADIX = BIN;
 
-content begin
+CONTENT BEGIN
 '''
 
-MIF_FOOTER = 'end;'
+MIF_FOOTER = 'END;'
 
 
 class File(Enum):
