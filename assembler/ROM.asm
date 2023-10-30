@@ -3,6 +3,7 @@
 STA @511    ; reseta a leitura do key 0
 STA @510    ; reseta a leitura do key 1
 STA @509    ; reseta a leitura do key reset
+STA @508    ; reseta a leitura dos segundos
 LDI $0      ; carrega o valor inicial das casas
 STA @57     ; intervalo numérico de configuração
 STA @0      ; armazena 0 na unidade
@@ -36,6 +37,8 @@ LDI $3		; carrega 3 para inicializar próximo endereço de referência do interv
 STA @11		; armazena a referência de estado 3 no endereço 11
 LDI $4		; carrega 4 para inicializar próximo endereço de referência do intervalo numérico de configuração
 STA @12		; armazena a referência de estado 4 no endereço 12
+LDI $6      ; 6 de referência
+STA @13
 
 
 
@@ -63,11 +66,11 @@ LOOP_PRINCIPAL:
 	CEQ @6					; se atingiu o limite, pula o incrementa contagem
 	JEQ .PULA_INCREMENTA_CONTAGEM
 
-    LDA @352    ; carrega o valor do botão 0
+    LDA @357    ; verifica se passou mais 1 segundo
     AND @6      ; aplica a mask
     CEQ @8      ; verifica se é 0
     JEQ .PULA_INCREMENTA_CONTAGEM
-    STA @511
+    STA @508
     JSR .INCREMENTA_CONTAGEM
 
     PULA_INCREMENTA_CONTAGEM:
@@ -155,55 +158,55 @@ RESET:
 
 
 INCREMENTA_CONTAGEM:
-    LDA @0                  ; carrega o valor da unidade
-    ADD @6                  ; incrementa o valor da unidade
-    CEQ @7                  ; compara o valor da casa com 10
-    JEQ .INCREMENTA_DEZENA  ; incrementa a casa da dezena caso necessário
-    STA @0                  ; armazena o valor da unidade
+    LDA @0                      ; carrega o valor da unidade
+    ADD @6                      ; incrementa o valor da unidade
+    CEQ @7                      ; compara o valor da casa com 10
+    JEQ .INCREMENTA_DEZENA_S    ; incrementa a casa da dezena caso necessário
+    STA @0                      ; armazena o valor da unidade
     FIM_INCREMENTA:
     RET
 
-    INCREMENTA_DEZENA:
-        LDI $0                  ; carrega 0
-        STA @0                  ; armazena 0 na unidade
-        LDA @1                  ; carrega o valor atual da dezena
-        ADD @6                  ; incrementa o valor da dezena
-        CEQ @7                  ; verifica se é igual a 10
-        JEQ .INCREMENTA_CENTENA ; se for, incrementa a centena
-        STA @1                  ; armazena o novo valor da dezena
-        JMP .FIM_INCREMENTA     ; sai da função
+    INCREMENTA_DEZENA_S:
+        LDI $0                      ; carrega 0
+        STA @0                      ; armazena 0 na unidade
+        LDA @1                      ; carrega o valor atual da dezena
+        ADD @6                      ; incrementa o valor da dezena
+        CEQ @13                     ; verifica se é igual a 6
+        JEQ .INCREMENTA_UNIDADE_M   ; se for, incrementa a centena
+        STA @1                      ; armazena o novo valor da dezena
+        JMP .FIM_INCREMENTA         ; sai da função
 
-    INCREMENTA_CENTENA:
-        LDI $0                  ; carrega 0
-        STA @1                  ; armazena 0 na dezena
-        LDA @2                  ; carrega o valor atual da centena
-        ADD @6                  ; incrementa o valor da centena
-        CEQ @7                  ; verifica se é igual a 10
-        JEQ .INCREMENTA_MILHAR  ; se for, incrementa o milhar
-        STA @2                  ; armazena o novo valor da centena
-        JMP .FIM_INCREMENTA     ; sai da função
+    INCREMENTA_UNIDADE_M:
+        LDI $0                      ; carrega 0
+        STA @1                      ; armazena 0 na dezena
+        LDA @2                      ; carrega o valor atual da centena
+        ADD @6                      ; incrementa o valor da centena
+        CEQ @7                      ; verifica se é igual a 10
+        JEQ .INCREMENTA_DEZENA_M    ; se for, incrementa o milhar
+        STA @2                      ; armazena o novo valor da centena
+        JMP .FIM_INCREMENTA         ; sai da função
 
-    INCREMENTA_MILHAR:
-        LDI $0                  ; carrega 0
-        STA @2                  ; armazena 0 na centena
-        LDA @3                  ; carrega o valor atual do milhar
-        ADD @6                  ; incrementa o valor do milhar
-        CEQ @7                  ; verifica se é igual a 10
-        JEQ .INCREMENTA_DMILHAR ; se for, incrementa a dezena de milhar
-        STA @3                  ; armazena o novo valor do milhar
-        JMP .FIM_INCREMENTA     ; sai da função
+    INCREMENTA_DEZENA_M:
+        LDI $0                      ; carrega 0
+        STA @2                      ; armazena 0 na centena
+        LDA @3                      ; carrega o valor atual do milhar
+        ADD @6                      ; incrementa o valor do milhar
+        CEQ @13                     ; verifica se é igual a 6
+        JEQ .INCREMENTA_UNIDADE_H   ; se for, incrementa a dezena de milhar
+        STA @3                      ; armazena o novo valor do milhar
+        JMP .FIM_INCREMENTA         ; sai da função
     
-    INCREMENTA_DMILHAR:
-        LDI $0                  ; carrega 0
-        STA @3                  ; armazena 0 no milhar
-        LDA @4                  ; carrega o valor atual da dezena de milhar
-        ADD @6                  ; incrementa o valor da dezena de milhar
-        CEQ @7                  ; verifica se é igual a 10
-        JEQ .INCREMENTA_CMILHAR ; se for, incrementa a centena de milhar
-        STA @4                  ; armazena o novo valor da dezena de milhar
-        JMP .FIM_INCREMENTA     ; sai da função
-    
-    INCREMENTA_CMILHAR:
+    INCREMENTA_UNIDADE_H:
+        LDI $0                      ; carrega 0
+        STA @3                      ; armazena 0 no milhar
+        LDA @4                      ; carrega o valor atual da dezena de milhar
+        ADD @6                      ; incrementa o valor da dezena de milhar
+        CEQ @7                      ; verifica se é igual a 10
+        JEQ .INCREMENTA_DEZENA_H    ; se for, incrementa a centena de milhar
+        STA @4                      ; armazena o novo valor da dezena de milhar
+        JMP .FIM_INCREMENTA         ; sai da função
+
+    INCREMENTA_DEZENA_H:    
         LDI $0                  ; carrega 0
         STA @4                  ; armazena 0 na dezena de milhar
         LDA @5                  ; carrega o valor atual da centena de milhar
@@ -241,16 +244,16 @@ MOSTRA_LIMITE:
 
     LDA @57                 ; carrega o intervalo atual
     CEQ @8                  ; verifica se é igual a 0
-    JEQ .DIGITO_0_ML     ; se for
+    JEQ .DIGITO_0_ML        ; se for
 	CEQ @9                  ; verifica se é igual a 1
-    JEQ .DIGITO_1_ML     ; se for
+    JEQ .DIGITO_1_ML        ; se for
 	CEQ @10                 ; verifica se é igual a 2
-    JEQ .DIGITO_2_ML     ; se for
+    JEQ .DIGITO_2_ML        ; se for
 	CEQ @11                 ; verifica se é igual a 3
-    JEQ .DIGITO_3_ML     ; se for
+    JEQ .DIGITO_3_ML        ; se for
 	CEQ @12                 ; verifica se é igual a 4
-    JEQ .DIGITO_4_ML     ; se for
-    JMP .DIGITO_5_ML 	; se não for nenhum dos acima
+    JEQ .DIGITO_4_ML        ; se for
+    JMP .DIGITO_5_ML 	    ; se não for nenhum dos acima
 
 	DIGITO_0_ML:
 		LDA @320    ; carrega o valor das chaves
