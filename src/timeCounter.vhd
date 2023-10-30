@@ -52,10 +52,10 @@ begin
   detectorSub0: work.edgeDetector(bordaSubida)
 			port map (clk => clock_in, entrada => (not clock_out_signal), saida => clock_out);
 
-  reg_reset  <= '1' when (reg_out = "0000000000000000010") else
+  reg_reset  <= '1' when (reg_out = "1011111010111100010") else
                 '0';
 
-  clock_out_signal  <= '1' when (reg_out = "0000000000000000001") else
+  clock_out_signal  <= '1' when (reg_out = "1011111010111100001") else
                 '0';
 
   reg_out_out <= reg_out;
