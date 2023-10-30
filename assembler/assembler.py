@@ -1,5 +1,5 @@
 from parser import Parser
-from lib import File, MIF_HEADER, MIF_FOOTER, TEST
+from lib import File, MIF_HEADER, MIF_FOOTER, TEST, PROJECT_PATH
 from os import path
 from shutil import copy
 
@@ -22,3 +22,4 @@ if __name__ == '__main__':
 
     else:
         build_mif(File.ASM, File.MIF)
+        copy(File.MIF, path.join(PROJECT_PATH, File.MIF))
