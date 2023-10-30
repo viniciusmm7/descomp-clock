@@ -62,15 +62,19 @@ architecture arquitetura of top_level is
 	signal hab_sw_1    : STD_LOGIC;
 	signal hab_sw_2    : STD_LOGIC;
 
-	signal hab_key_0    : STD_LOGIC;
-	signal hab_key_1    : STD_LOGIC;
-	signal hab_key_2    : STD_LOGIC;
-	signal hab_key_3    : STD_LOGIC;
-	signal hab_key_r    : STD_LOGIC;
+	signal hab_key_0        : STD_LOGIC;
+	signal hab_key_1        : STD_LOGIC;
+	signal hab_key_2        : STD_LOGIC;
+	signal hab_key_3        : STD_LOGIC;
+	signal hab_key_r        : STD_LOGIC;
+  signal hab_seconds_key  : STD_LOGIC;
 
-	signal clear_key_0  : STD_LOGIC;
-	signal clear_key_1  : STD_LOGIC;
-	signal clear_key_r  : STD_LOGIC;
+	signal clear_key_0        : STD_LOGIC;
+	signal clear_key_1        : STD_LOGIC;
+	signal clear_key_r        : STD_LOGIC;
+	signal clear_seconds_key  : STD_LOGIC;
+
+  signal seconds_signal : STD_LOGIC;
 
 begin
 
@@ -129,30 +133,32 @@ begin
 
 	ADDR_DECODER: entity work.decoderEnderecos
 		port map (
-			ADDRESS     => data_addr_bus,
-			WR          => wr,
-			RD          => rd,
-			HAB_LED_0   => hab_led_0,
-			HAB_LED_1   => hab_led_1,
-			HAB_LED_2   => hab_led_2,
-			HAB_RAM     => hab_RAM,
-			HAB_HEX_0   => hab_hex_0,
-			HAB_HEX_1   => hab_hex_1,
-			HAB_HEX_2   => hab_hex_2,
-			HAB_HEX_3   => hab_hex_3,
-			HAB_HEX_4   => hab_hex_4,
-			HAB_HEX_5   => hab_hex_5,
-			HAB_SW_0    => hab_sw_0,
-			HAB_SW_1    => hab_sw_1,
-			HAB_SW_2    => hab_sw_2,
-			HAB_KEY_0   => hab_key_0,
-			HAB_KEY_1   => hab_key_1,
-			HAB_KEY_2   => hab_key_2,
-			HAB_KEY_3   => hab_key_3,
-			HAB_KEY_R   => hab_key_r,
-			CLEAR_KEY_0 => clear_key_0,
-			CLEAR_KEY_1 => clear_key_1,
-			CLEAR_KEY_R => clear_key_r
+			ADDRESS           => data_addr_bus,
+			WR                => wr,
+			RD                => rd,
+			HAB_LED_0         => hab_led_0,
+			HAB_LED_1         => hab_led_1,
+			HAB_LED_2         => hab_led_2,
+			HAB_RAM           => hab_RAM,
+			HAB_HEX_0         => hab_hex_0,
+			HAB_HEX_1         => hab_hex_1,
+			HAB_HEX_2         => hab_hex_2,
+			HAB_HEX_3         => hab_hex_3,
+			HAB_HEX_4         => hab_hex_4,
+			HAB_HEX_5         => hab_hex_5,
+			HAB_SW_0          => hab_sw_0,
+			HAB_SW_1          => hab_sw_1,
+			HAB_SW_2          => hab_sw_2,
+			HAB_KEY_0         => hab_key_0,
+			HAB_KEY_1         => hab_key_1,
+			HAB_KEY_2         => hab_key_2,
+			HAB_KEY_3         => hab_key_3,
+			HAB_KEY_R         => hab_key_r,
+      HAB_SECONDS_KEY   => hab_seconds_key,
+			CLEAR_KEY_0       => clear_key_0,
+			CLEAR_KEY_1       => clear_key_1,
+			CLEAR_KEY_R       => clear_key_r,
+			CLEAR_SECONDS_KEY => clear_seconds_key
 		);
 
 	LED_0_REG: entity work.registradorGenerico
@@ -290,6 +296,21 @@ begin
 			BUTTON    => FPGA_RESET_N,
 			OUTPUT    => data_rd_bus(0)
 		);
+
+  SECONDS_KEY: entity work.keyUnit
+		port map (
+			CLK       => CLK,
+			CLEAR     => clear_seconds_key,
+			HABILITA  => hab_seconds_key,
+			BUTTON    => seconds_signal,
+			OUTPUT    => data_rd_bus(0)
+		);
+
+  TIMECOUNTER: entity work.timeCounter
+    port map (
+      clock_in  => CLK,
+      clock_out => seconds_signal
+    );
 
 	PCOUT   <= ROM_address;
 	DOUT    <= data_wr_bus;
