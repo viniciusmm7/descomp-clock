@@ -16,6 +16,7 @@ architecture arch of timeCounter is
   signal reg_out          : STD_LOGIC_VECTOR(18 downto 0);
   signal reg_reset        : STD_LOGIC;
   signal reg_hab          : STD_LOGIC;
+  signal clock_out_signal : STD_LOGIC;
 
   constant LIMIT : STD_LOGIC_VECTOR := "1011111010111100001";
 
@@ -47,11 +48,14 @@ begin
       entrada => reg_out,
       saida   => reg_in
     );
+  
+  detectorSub0: work.edgeDetector(bordaSubida)
+			port map (clk => clock_in, entrada => (not clock_out_signal), saida => clock_out);
 
-  reg_reset  <= '1' when (reg_in = "1011111010111100011") else
+  reg_reset  <= '1' when (reg_out = "0000000000000000010") else
                 '0';
 
-  clock_out  <= '1' when (reg_out = "1011111010111100001") else
+  clock_out_signal  <= '1' when (reg_out = "0000000000000000001") else
                 '0';
 
   reg_out_out <= reg_out;
