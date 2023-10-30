@@ -103,7 +103,7 @@ class Parser:
         if not register.startswith('%'):
             raise SyntaxError(f'Invalid register syntax at: {register}')
 
-        register = register[1:].strip()
+        register = register[1:].strip().lower()
         if register not in REGS:
             raise NameError(f'{register} is not a valid register')
 
