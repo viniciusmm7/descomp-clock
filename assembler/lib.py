@@ -27,21 +27,3 @@ class Length(IntEnum):
     MNEMONIC = 4
     IMMEDIATE = 9
     REGISTERS = 2
-
-
-class NumericSymbol(Enum):
-    ADDRESS = '@'
-    INTEGER = '$'
-
-
-class AlphaNumericSymbol(Enum):
-    REGISTER = '%'
-    LABEL = '.'
-
-
-class Symbol:
-    def __init__(self, symbol: NumericSymbol | AlphaNumericSymbol):
-        self.symbol: NumericSymbol | AlphaNumericSymbol = symbol
-
-    def is_alpha_numeric(self):
-        return self.symbol in AlphaNumericSymbol.__members__.values()

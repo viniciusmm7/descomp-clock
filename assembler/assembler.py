@@ -20,8 +20,8 @@ def build_mif(asm_file, mif_file):
 
 if __name__ == '__main__':
     if TEST:
-        build_mif(File.TEST_ASM, File.TEST_MIF)
+        build_mif(File.TEST_ASM.value, File.TEST_MIF.value)
 
     else:
-        build_mif(File.ASM, File.MIF)
+        build_mif(File.ASM.value, File.MIF.value)
         copy(str(File.MIF), path.join(str(PROJECT_PATH), str(File.MIF)))

@@ -1,4 +1,4 @@
-from lib import Length, Symbol, NumericSymbol, AlphaNumericSymbol
+from lib import Length
 from mnemonics import MNEMONICS
 from registers import REGS
 
@@ -60,26 +60,11 @@ class Parser:
 
         return instruction, comment
 
-    @staticmethod
-    def __parse_mnemonic(line: str) -> str:
-        mnemonic = line.split(' ')[0].strip()
-        mnemonic_value = MNEMONICS[mnemonic]['value']
-        solo = MNEMONICS[mnemonic]['solo']
-        register = MNEMONICS[mnemonic]['reg']
-        mnemonic_register = mnemonic_value + register
+    def __parse_symbol(self, line: str, symbol: str, length: int = Length.INSTRUCTION, source: dict = None) -> str:
+        value = line.split(',')[0].strip()
+        value = value.split(symbol)[1].strip()
 
-        if solo:
-            return mnemonic_register.ljust(Length.INSTRUCTION, '0')
-
-        if '@' in line:
-            return mnemonic_register.ljust(Length.MNEMONIC + Length.REGISTERS, '0')
-
-        return mnemonic_register.ljust(Length.MNEMONIC + Length.REGISTERS, '0')
-
-    def __parse_symbol(self, line: str, symbol: Symbol, length: int = Length.INSTRUCTION, source: dict = None) -> str:
-        value = line.split(symbol.symbol)[1].strip()
-
-        if symbol.is_alpha_numeric():
+        if symbol == '.':
             if value not in source:
                 raise NameError(f'{value} is not declared')
 
@@ -88,29 +73,64 @@ class Parser:
         return self.__convert_to_binary(value, length)
 
     def __parse_address(self, line: str) -> str:
-        return self.__parse_symbol(line, Symbol(NumericSymbol.ADDRESS), Length.IMMEDIATE)
+        return self.__parse_symbol(line, '@', Length.IMMEDIATE)
 
     def __parse_integer(self, line: str) -> str:
-        return self.__parse_symbol(line, Symbol(NumericSymbol.INTEGER), Length.IMMEDIATE)
+        return self.__parse_symbol(line, '$', Length.IMMEDIATE)
 
     def __parse_label(self, line: str) -> str:
-        return self.__parse_symbol(line, Symbol(AlphaNumericSymbol.LABEL), Length.IMMEDIATE, self.labels)
+        return self.__parse_symbol(line, '.', Length.IMMEDIATE, self.labels)
 
-    def __parse_register(self, line: str) -> str:
-        result = ''
+    @staticmethod
+    def __parse_mnemonic(line: str) -> str:
+        mnemonic = line.split(' ', 1)[0].strip()
 
-        for register in line.split(','):
-            register = register.strip()
+        if MNEMONICS[mnemonic]['solo']:
+            return MNEMONICS[mnemonic]['value'].ljust(Length.INSTRUCTION, '0')
 
-            if register.startswith('%'):
-                register = register[1:].strip()
+        return MNEMONICS[mnemonic]['value']
 
-                if register not in REGS:
-                    raise NameError(f'{register} is not a valid register')
+    @staticmethod
+    def __parse_register(line: str) -> str:
+        register = line.split(';', 1)[0].strip()
+        register = ' '.join(register.split(' ')[1:])
+        register_list = register.split(',')
 
-                result += self.__convert_to_binary(REGS[register], Length.REGISTERS)
+        if len(register_list) < 2:
+            return '00'
 
-        return result
+        register = register_list[1].strip()
+        if not register.startswith('%'):
+            raise SyntaxError(f'Invalid register syntax at: {register}')
+
+        register = register[1:].strip()
+        if register not in REGS:
+            raise NameError(f'{register} is not a valid register')
+
+        return REGS[register]
+
+    def __parse_immediate(self, line: str) -> str:
+        if '@' in line:
+            return self.__parse_address(line)
+
+        elif '$' in line:
+            return self.__parse_integer(line)
+
+        elif '.' in line:
+            return self.__parse_label(line)
+
+        raise SyntaxError(f'Invalid immediate at: {line}')
+
+    def __parse_instruction(self, line: str) -> str:
+        mnemonic = self.__parse_mnemonic(line)
+
+        if len(mnemonic) == Length.INSTRUCTION:
+            return mnemonic
+
+        register = self.__parse_register(line)
+        immediate = self.__parse_immediate(line)
+
+        return mnemonic + register + immediate
 
     def __is_invalid_line(self, line: str) -> bool:
         if not line.strip():
@@ -133,30 +153,6 @@ class Parser:
         self.adjusted_line_counter -= self.count_comment_lines
         self.adjusted_line_counter -= self.count_label_lines
 
-    def __parse_instruction(self, line: str) -> str:
-        mnemonic = self.__parse_mnemonic(line)
-        instruction = mnemonic
-
-        if len(instruction) == Length.INSTRUCTION:
-            return instruction
-
-        if '@' in line:
-            instruction += self.__parse_address(line)
-
-        elif '$' in line:
-            instruction += self.__parse_integer(line)
-
-        elif '.' in line:
-            instruction += self.__parse_label(line)
-
-        elif '%' in line:
-            instruction += self.__parse_register(line)
-
-        else:
-            raise SyntaxError(f'Invalid instruction {line}')
-
-        return instruction
-
     def __parse_line(self, line: str) -> bin or str or None:
         self.__update_adjusted_line_counter()
 
@@ -166,6 +162,7 @@ class Parser:
             instruction, comment = self.__split_line(line)
             instruction = self.__parse_instruction(instruction)
             mif_line = f'{self.adjusted_line_counter}:\t{instruction};\t{comment}\n'
+            print(mif_line, end='')
 
             return mif_line
 

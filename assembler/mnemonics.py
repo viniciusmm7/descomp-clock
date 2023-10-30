@@ -1,74 +1,57 @@
 from lib import Length
-from registers import REGS
 
 
 def mnemonic_binary(mne_val: int) -> str:
     return bin(mne_val)[2:].zfill(Length.MNEMONIC)
 
 
-def register_binary(reg: str) -> str:
-    return bin(REGS[reg])[2:].zfill(Length.REGISTERS)
-
-
 MNEMONICS = {
     'NOP': {
         'value': mnemonic_binary(0),
-        'solo': True,
-        'reg': register_binary('r0')
+        'solo': True
     },
     'LDA': {
         'value': mnemonic_binary(1),
-        'solo': False,
-        'reg': register_binary('r0')
+        'solo': False
     },
     'ADD': {
         'value': mnemonic_binary(2),
-        'solo': False,
-        'reg': register_binary('r0')
+        'solo': False
     },
     'SUB': {
         'value': mnemonic_binary(3),
-        'solo': False,
-        'reg': register_binary('r0')
+        'solo': False
     },
     'LDI': {
         'value': mnemonic_binary(4),
-        'solo': False,
-        'reg': register_binary('r0')
+        'solo': False
     },
     'STA': {
         'value': mnemonic_binary(5),
-        'solo': False,
-        'reg': register_binary('r0')
+        'solo': False
     },
     'JMP': {
         'value': mnemonic_binary(6),
-        'solo': False,
-        'reg': register_binary('r0')
+        'solo': False
     },
     'JEQ': {
         'value': mnemonic_binary(7),
-        'solo': False,
-        'reg': register_binary('r0')
+        'solo': False
     },
     'CEQ': {
         'value': mnemonic_binary(8),
-        'solo': False,
-        'reg': register_binary('r0')
+        'solo': False
     },
     'JSR': {
         'value': mnemonic_binary(9),
-        'solo': False,
-        'reg': register_binary('r0')
+        'solo': False
     },
     'RET': {
         'value': mnemonic_binary(10),
-        'solo': True,
-        'reg': register_binary('r0')
+        'solo': True
     },
     'AND': {
         'value': mnemonic_binary(11),
-        'solo': False,
-        'reg': register_binary('r0')
+        'solo': False
     },
 }
