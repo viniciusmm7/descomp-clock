@@ -1,7 +1,8 @@
-from parser import Parser
-from lib import File, MIF_HEADER, MIF_FOOTER, TEST, PROJECT_PATH
 from os import path
 from shutil import copy
+
+from lib import File, MIF_HEADER, MIF_FOOTER, TEST, PROJECT_PATH
+from parser import Parser
 
 
 def build_mif(asm_file, mif_file):
@@ -16,10 +17,11 @@ def build_mif(asm_file, mif_file):
             mif.writelines(mif_lines)
             mif.write('\n' + MIF_FOOTER)
 
+
 if __name__ == '__main__':
     if TEST:
         build_mif(File.TEST_ASM, File.TEST_MIF)
 
     else:
         build_mif(File.ASM, File.MIF)
-        copy(File.MIF, path.join(PROJECT_PATH, File.MIF))
+        copy(str(File.MIF), path.join(str(PROJECT_PATH), str(File.MIF)))

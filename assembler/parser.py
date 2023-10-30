@@ -169,7 +169,6 @@ class Parser:
 
             return mif_line
 
-
     def parse(self):
         mif_lines = []
 
