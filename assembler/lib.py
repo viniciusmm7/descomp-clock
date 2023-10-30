@@ -1,5 +1,4 @@
-from enum import StrEnum, IntEnum
-
+from enum import Enum, IntEnum
 
 TEST = True
 
@@ -15,7 +14,8 @@ content begin
 
 MIF_FOOTER = 'end;'
 
-class File(StrEnum):
+
+class File(Enum):
     ASM = 'ROM.asm'
     MIF = 'initROM.mif'
     TEST_ASM = 'test.asm'
@@ -29,12 +29,12 @@ class Length(IntEnum):
     REGISTERS = 2
 
 
-class NumericSymbol(StrEnum):
+class NumericSymbol(Enum):
     ADDRESS = '@'
     INTEGER = '$'
 
 
-class AlphaNumericSymbol(StrEnum):
+class AlphaNumericSymbol(Enum):
     REGISTER = '%'
     LABEL = '.'
 
