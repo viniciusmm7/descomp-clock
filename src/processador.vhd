@@ -6,7 +6,7 @@ entity processador is
   generic (
     larguraDados            : natural := 8;
     larguraEnderecos        : natural := 9;
-    larguraInstrucoes       : natural := 13
+    larguraInstrucoes       : natural := 15
   );
   port   (
     CLK         : in  STD_LOGIC;
@@ -41,7 +41,7 @@ architecture arquitetura of processador is
   signal sel_next_instruction : STD_LOGIC_VECTOR(1 downto 0);
 
   signal habilita_escrita_ret : STD_LOGIC;
-  signal hab_regs  : STD_LOGIC;
+  signal hab_regs             : STD_LOGIC;
   signal seletor_MUX_dados    : STD_LOGIC;
   signal habilita_flag        : STD_LOGIC;
   signal current_zero         : STD_LOGIC;
@@ -151,7 +151,7 @@ ret                   <= controle(9);
 jsr                   <= controle(8);
 jeq                   <= controle(7);
 seletor_MUX_dados     <= controle(6);
-hab_regs   <= controle(5);
+hab_regs              <= controle(5);
 operacao              <= controle(4 downto 3);
 habilita_flag         <= controle(2);
 opcode                <= INSTRUCTION(14 downto 11);
