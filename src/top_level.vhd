@@ -297,19 +297,15 @@ begin
 			OUTPUT    => data_rd_bus(0)
 		);
 
-  SECONDS_KEY: entity work.keyUnit
-		port map (
-			CLK       => CLK,
-			CLEAR     => clear_seconds_key,
-			HABILITA  => hab_seconds_key,
-			BUTTON    => seconds_signal,
-			OUTPUT    => data_rd_bus(0)
-		);
-
   TIMECOUNTER: entity work.timeCounter
     port map (
-      clock_in  => CLK,
-      clock_out => seconds_signal
+      clock_in      => CLK,
+      reset_count   => '0',
+      run_count     => CLK,
+      stop_count    => '0',
+      reset_flag    => clear_seconds_key,
+      habilita_flag => hab_seconds_key,
+      output        => data_rd_bus(0)
     );
 
 	PCOUT   <= ROM_address;
