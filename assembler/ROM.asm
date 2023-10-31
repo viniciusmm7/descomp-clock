@@ -63,7 +63,6 @@ LOOP_PRINCIPAL:
 
     PULA_CONFIG:
 
-	JSR .ATINGIU_LIMITE		; verifica se a contagem atingiu o limite
 	CEQ @6					; se atingiu o limite, pula o incrementa contagem
 	JEQ .PULA_INCREMENTA_CONTAGEM
 
@@ -204,6 +203,9 @@ INCREMENTA_CONTAGEM:
         ADD @6                      ; incrementa o valor da dezena de milhar
         CEQ @7                      ; verifica se é igual a 10
         JEQ .INCREMENTA_DEZENA_H    ; se for, incrementa a centena de milhar
+        CEQ @12
+        JEQ .QUATRO
+        OKOK:
         STA @4                      ; armazena o novo valor da dezena de milhar
         JMP .FIM_INCREMENTA         ; sai da função
 
@@ -219,8 +221,15 @@ INCREMENTA_CONTAGEM:
 
     INCREMENTA_MILHAO:
         LDI $0  ; carrega 0
-        STA $5  ; armazena 0 na centena de milhar
+        STA @5  ; armazena 0 na centena de milhar
+        STA @4
         JMP .FIM_INCREMENTA
+
+    QUATRO:
+        LDA @5
+        CEQ @10
+        JEQ .INCREMENTA_MILHAO
+        JMP .OKOK
 
 
 
@@ -447,58 +456,6 @@ MUDA_INTERVALO:
 
 
 
-ATINGIU_LIMITE:
-
-	LDA @5		; carrega o valor da centena de milhar
-	CEQ @63		; compara com o valor limite da centena de milhar
-	JEQ .CMILHAR_ATINGIU
-	LDI $0		; se não for igual, não atingiu
-	RET
-
-	CMILHAR_ATINGIU:
-	LDA @4		; carrega o valor da dezena de milhar
-	CEQ @62		; compara com o valor limite da dezena de milhar
-	JEQ .DMILHAR_ATINGIU
-	LDI $0		; se não for igual, não atingiu
-	RET
-
-	DMILHAR_ATINGIU:
-	LDA @3		; carrega o valor do milhar
-	CEQ @61		; compara com o valor limite do milhar
-	JEQ .MILHAR_ATINGIU
-	LDI $0		; se não for igual, não atingiu
-	RET
-
-	MILHAR_ATINGIU:
-	LDA @2		; carrega o valor da centena
-	CEQ @60		; compara com o valor limite da centena
-	JEQ .CENTENA_ATINGIU
-	LDI $0		; se não for igual, não atingiu
-	RET
-
-	CENTENA_ATINGIU:
-	LDA @1		; carrega o valor da dezena
-	CEQ @59		; compara com o valor limite da dezena
-	JEQ .DEZENA_ATINGIU
-	LDI $0		; se não for igual, não atingiu
-	RET
-
-	DEZENA_ATINGIU:
-	LDA @0		; carrega o valor da unidade
-	CEQ @58		; compara com o valor limite da unidade
-	JEQ .UNIDADE_ATINGIU
-	LDI $0		; se não for igual, não atingiu
-	RET
-
-	UNIDADE_ATINGIU:
-	LDI $255
-	STA @256
-	STA @257
-	STA @258
-	LDI $1
-	RET
-
-
 ARMAZENA_LIMITE:
 
 	LDA @57                 ; carrega o digito atual
@@ -545,15 +502,15 @@ ARMAZENA_LIMITE:
 	
 	FINAL_AL:
 	LDA @51
-	STA @58
+	STA @0
 	LDA @52
-	STA @59
+	STA @1
 	LDA @53
-	STA @60
+	STA @2
 	LDA @54
-	STA @61
+	STA @3
 	LDA @55
-	STA @62
+	STA @4
 	LDA @56
-	STA @63
+	STA @5
     RET

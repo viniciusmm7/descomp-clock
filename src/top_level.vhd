@@ -251,13 +251,6 @@ begin
 			saida     => data_rd_bus(0)
 		);
 
-	SW_2: entity work.bufferTriState
-		port map (
-			entrada   => SW(9),
-			habilita  => hab_sw_2,
-			saida     => data_rd_bus(0)
-		);
-
 	KEY_0: entity work.keyUnit
 		port map (
 			CLK       => CLK,
@@ -307,7 +300,8 @@ begin
       stop_count    => '0',
       reset_flag    => clear_seconds_key,
       habilita_flag => hab_seconds_key,
-      output        => data_rd_bus(0)
+      output        => data_rd_bus(0),
+	  switch		=> SW(9)
     );
 
 	PCOUT   <= ROM_address;

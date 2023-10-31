@@ -9,13 +9,16 @@ entity timeCounter is
     stop_count      : in  STD_LOGIC;
     reset_flag      : in  STD_LOGIC;
     habilita_flag   : in  STD_LOGIC;
-    output          : out STD_LOGIC
+    output          : out STD_LOGIC;
+    switch          : in STD_LOGIC
 	);
 end entity;
 
 architecture arch of timeCounter is
 
   signal signal_divided   : STD_LOGIC;
+  signal signal_divided_1 : STD_LOGIC;
+  signal signal_divided_2 : STD_LOGIC;
   signal reg_in           : STD_LOGIC_VECTOR(18 downto 0);
   signal reg_out          : STD_LOGIC_VECTOR(18 downto 0);
   signal clock_out        : STD_LOGIC;
@@ -31,7 +34,13 @@ begin
   DIVISOR: entity work.dividerBy128
     port map (
       clock_in  => clock_in,
-      clock_out => signal_divided 
+      clock_out => signal_divided_1
+    );
+
+  DIVISOR2: entity work.dividerBy2
+    port map (
+      clock_in  => clock_in,
+      clock_out => signal_divided_2
     );
 
   COUNT_REG: entity work.registradorGenerico
@@ -84,5 +93,7 @@ begin
                 '0';
 
   output <= key_out;
+  signal_divided  <=  signal_divided_1 when (switch = '1') else
+                      signal_divided_2;
 
 end architecture;
