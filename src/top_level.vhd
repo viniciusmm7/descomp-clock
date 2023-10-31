@@ -74,7 +74,8 @@ architecture arquitetura of top_level is
 	signal clear_key_r        : STD_LOGIC;
 	signal clear_seconds_key  : STD_LOGIC;
 
-  signal seconds_signal : STD_LOGIC;
+  signal seconds_signal     : STD_LOGIC;
+  signal run_seconds_count  : STD_LOGIC;
 
 begin
 
@@ -158,7 +159,8 @@ begin
 			CLEAR_KEY_0       => clear_key_0,
 			CLEAR_KEY_1       => clear_key_1,
 			CLEAR_KEY_R       => clear_key_r,
-			CLEAR_SECONDS_KEY => clear_seconds_key
+			CLEAR_SECONDS_KEY => clear_seconds_key,
+      RUN_SECONDS_COUNT => run_seconds_count
 		);
 
 	LED_0_REG: entity work.registradorGenerico
@@ -301,7 +303,7 @@ begin
     port map (
       clock_in      => CLK,
       reset_count   => '0',
-      run_count     => CLK,
+      run_count     => run_seconds_count,
       stop_count    => '0',
       reset_flag    => clear_seconds_key,
       habilita_flag => hab_seconds_key,

@@ -3,7 +3,8 @@
 STA @511    ; reseta a leitura do key 0
 STA @510    ; reseta a leitura do key 1
 STA @509    ; reseta a leitura do key reset
-STA @508    ; reseta a leitura dos segundos
+STA @508    ; reseta a flag dos segundos
+STA @507    ; inicializa o contador
 LDI $0      ; carrega o valor inicial das casas
 STA @57     ; intervalo numérico de configuração
 STA @0      ; armazena 0 na unidade
