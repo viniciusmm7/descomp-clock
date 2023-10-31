@@ -1,5 +1,5 @@
 Archive Project report for clock
-Wed Oct 18 22:46:01 2023
+Mon Oct 30 23:52:16 2023
 Quartus Prime Version 20.1.0 Build 711 06/05/2020 SJ Lite Edition
 
 
@@ -36,7 +36,7 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------+
 ; Archive Project Summary                                        ;
 +------------------------+---------------------------------------+
-; Archive Project Status ; Successful - Wed Oct 18 22:46:01 2023 ;
+; Archive Project Status ; Successful - Mon Oct 30 23:52:16 2023 ;
 ; Revision Name          ; clock                                 ;
 ; Top-level Entity Name  ; top_level                             ;
 ; Family                 ; Cyclone V                             ;
@@ -60,8 +60,8 @@ Info: ----------------------------------------------------------
 Info: Generated report 'clock.archive.rpt'
 Info (23030): Evaluation of Tcl script /home/jeronimo/intelFPGA_lite/20.1/quartus/common/tcl/apps/qpm/qar.tcl was successful
 Info: Quartus Prime Shell was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 580 megabytes
-    Info: Processing ended: Wed Oct 18 22:46:01 2023
+    Info: Peak virtual memory: 578 megabytes
+    Info: Processing ended: Mon Oct 30 23:52:16 2023
     Info: Elapsed time: 00:00:00
     Info: Total CPU time (on all processors): 00:00:00
 
@@ -72,6 +72,7 @@ Info: Quartus Prime Shell was successful. 0 errors, 1 warning
 ; File Name                                                                  ;
 +----------------------------------------------------------------------------+
 ; /home/jeronimo/intelFPGA_lite/20.1/quartus/linux64/assignment_defaults.qdf ;
+; bancoRegistradoresArqRegMem.vhd                                            ;
 ; BinaryDigit.vhd                                                            ;
 ; bufferTriState.vhd                                                         ;
 ; bufferTriState8.vhd                                                        ;
@@ -82,6 +83,11 @@ Info: Quartus Prime Shell was successful. 0 errors, 1 warning
 ; decoder3x8.vhd                                                             ;
 ; decoderEnderecos.vhd                                                       ;
 ; decoderInstrucoes.vhd                                                      ;
+; dividerBy2.vhd                                                             ;
+; dividerBy4.vhd                                                             ;
+; dividerBy8.vhd                                                             ;
+; dividerBy16.vhd                                                            ;
+; dividerBy128.vhd                                                           ;
 ; edgeDetector.vhd                                                           ;
 ; FlipFlopD.vhd                                                              ;
 ; hexUnit.vhd                                                                ;
@@ -97,6 +103,7 @@ Info: Quartus Prime Shell was successful. 0 errors, 1 warning
 ; registradorBit.vhd                                                         ;
 ; registradorGenerico.vhd                                                    ;
 ; somaConstante.vhd                                                          ;
+; timeCounter.vhd                                                            ;
 ; top_level.vhd                                                              ;
 ; ULA.vhd                                                                    ;
 ; Waveform.vwf                                                               ;
